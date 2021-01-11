@@ -1,5 +1,5 @@
 <template>
-    <v-card :loading="loading">
+    <v-card :height="height" :loading="loading">
         <v-card-title>{{ title }}</v-card-title>
 
         <v-card-actions>
@@ -30,6 +30,11 @@ export default {
             type: Boolean,
             required: false,
             default: false
+        },
+        height: {
+            type: Number,
+            required: false,
+            default: null
         }
     }
 };

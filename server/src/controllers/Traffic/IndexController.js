@@ -37,6 +37,16 @@ class TrafficIndexController {
     }
 
     async _search(period, search, type) {
+        if (period instanceof Object && Array.isArray(period)) {
+            const results = {};
+
+            for (const p of period) {
+                results[p] = await this._search(p, search, type);
+            }
+
+            return results;
+        }
+
         const periods = period ? [period] : ['dec_week_1', 'dec_week_2', 'dec_week_3', 'dec_week_4', 'dec_week_5'];
 
         const searches = search ? [search] : ['google', 'facebook', 'email', 'direct', 'referral', 'none'];

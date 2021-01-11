@@ -1,5 +1,5 @@
 <template>
-    <v-card>
+    <v-card :height="650">
         <v-card-title>Traffic per Page</v-card-title>
 
         <v-card-actions>
