@@ -17,7 +17,7 @@
         />
 
         <v-select
-            v-model="form.user"
+            v-model="form.userId"
             :items="selectValues.userValues"
             item-text="text"
             item-value="value"
@@ -38,6 +38,7 @@
 
 <script>
 import dayjs from 'dayjs';
+import { mapActions } from 'vuex';
 
 export default {
     props: {
@@ -45,11 +46,6 @@ export default {
             type: Number,
             required: false,
             default: 100
-        },
-        maxDaysInFuture: {
-            type: Number,
-            required: false,
-            default: 30
         }
     },
 
@@ -66,9 +62,9 @@ export default {
             });
         }
 
-        for (let i = 1; i <= this.maxUsers; i++) {
+        for (let i = 0; i < this.maxUsers; i++) {
             userValues.push({
-                text: `User${i}`,
+                text: `User${i + 1}`,
                 value: i
             });
         }
@@ -77,7 +73,7 @@ export default {
             form: {
                 date: dayjs('2015-12-01').format('YYYY-MM-DD'),
                 source: 'facebook',
-                user: 1,
+                userId: 1,
                 action: 'homepage'
             },
             selectValues: {
@@ -109,8 +105,10 @@ export default {
     },
 
     methods: {
-        submitForm() {
-            // TODO
+        ...mapActions({ saveData: 'data/save' }),
+
+        async submitForm() {
+            await this.saveData(this.form);
         }
     }
 };

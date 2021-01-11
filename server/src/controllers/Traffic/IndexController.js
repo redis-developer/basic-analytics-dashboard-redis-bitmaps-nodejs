@@ -1,41 +1,30 @@
-const dayjs = require('dayjs');
-const faker = require('faker');
 const { StatusCodes } = require('http-status-codes');
 
-const makeFakeData = numberOfEntries => {
-    const entries = [];
-
-    for (let i = 0; i < numberOfEntries; i++) {
-        entries.push({
-            page: faker.random.arrayElement(['homepage', 'product1page', 'product2page', 'product3page']),
-            source: faker.random.arrayElement(['google', 'email', 'direct', 'referral', 'facebook', 'none']),
-            date: dayjs(faker.date.between('2015-12-01', '2015-12-31')).format('YYYY-MM-DD')
-        });
+class TrafficIndexController {
+    constructor(redisService, periodService) {
+        this.redisService = redisService;
+        this.periodService = periodService;
     }
 
-    return entries;
-};
-
-const testData = makeFakeData(500);
-
-class TrafficIndexController {
     async invoke(req, res) {
         const { filter } = req.query;
 
         try {
-            const { between = null } = filter ? JSON.parse(filter) : {};
+            const { period = null, search = null, type = 'source' } = filter ? JSON.parse(filter) : {};
 
-            const data =
-                between && typeof between === 'object' && between.from && between.to
-                    ? testData.filter(
-                          data =>
-                              data.date === between.from ||
-                              data.date === between.to ||
-                              dayjs(data.date).isBetween(between.from, between.to, 'day')
-                      )
-                    : testData;
+            if (search && Array.isArray(search)) {
+                const totals = {};
 
-            return res.send(data);
+                for (const item of search) {
+                    totals[`${item}Traffic`] = await this._search(period, item, type);
+                }
+
+                return res.send(totals);
+            }
+
+            const totalTraffic = await this._search(period, search, type);
+
+            return res.send({ totalTraffic });
         } catch (err) {
             if (err instanceof SyntaxError) {
                 return res.sendStatus(StatusCodes.BAD_REQUEST);
@@ -45,6 +34,26 @@ class TrafficIndexController {
 
             return res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    async _search(period, search, type) {
+        const periods = period ? [period] : ['dec_week_1', 'dec_week_2', 'dec_week_3', 'dec_week_4', 'dec_week_5'];
+
+        const searches = search ? [search] : ['google', 'facebook', 'email', 'direct', 'referral', 'none'];
+
+        const prefix = type === 'page' ? 'traffic_per_page' : 'traffic_per_source';
+
+        const keys = [];
+
+        searches.forEach(_search => {
+            const _key = `${prefix}:${_search}`;
+
+            periods.forEach(period => keys.push(`${_key}:${period}`));
+        });
+
+        const total = await this.redisService.calculateOr(keys);
+
+        return total;
     }
 }
 

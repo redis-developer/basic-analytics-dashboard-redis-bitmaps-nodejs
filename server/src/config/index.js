@@ -5,5 +5,8 @@ require('dotenv').config({
 module.exports = {
     server: {
         port: process.env.SERVER_PORT || 3000
+    },
+    redis: {
+        uri: `redis://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`
     }
 };

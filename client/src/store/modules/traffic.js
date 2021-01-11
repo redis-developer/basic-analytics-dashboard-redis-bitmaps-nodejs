@@ -2,25 +2,17 @@ import axios from '@/plugins/axios';
 
 const namespaced = true;
 
-const state = () => ({
-    entries: []
-});
+const state = () => ({});
 
-const getters = {
-    total: state => state.entries.length,
-    perPage: state => page => state.entries.filter(entry => entry.page === page).length,
-    perSource: state => source => state.entries.filter(entry => entry.source === source).length
-};
+const getters = {};
 
-const mutations = {
-    SET_ENTRIES: (state, entries) => (state.entries = entries)
-};
+const mutations = {};
 
 const actions = {
-    async fetchEtriesByTime({ commit }, between) {
-        const { data } = await axios.get('/traffic', { params: { filter: { between } } });
+    async fetch(vuexContext, params) {
+        const { data } = await axios.get('/traffic', { params });
 
-        commit('SET_ENTRIES', data);
+        return data;
     }
 };
 
