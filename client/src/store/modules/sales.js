@@ -10,7 +10,7 @@ const mutations = {};
 
 const actions = {
     async fetch(vuexContext, params) {
-        const { data } = await axios.get('/sales', { params });
+        const { data } = await axios.get('/api/sales', { params });
 
         return data;
     }

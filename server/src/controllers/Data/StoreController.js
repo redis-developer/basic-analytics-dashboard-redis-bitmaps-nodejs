@@ -3,54 +3,51 @@ const { StatusCodes } = require('http-status-codes');
 class DataStoreController {
     constructor(redisService, periodService) {
         this.redisService = redisService;
-        this.periodService = periodService;
     }
 
     async invoke(req, res) {
         const { userId, date, action, source } = req.body;
 
-        const period = this.periodService.getPeriodByDate(date);
-
         const actions = {
             homepage: {
                 method: 'storeTrafficPerPage',
-                params: [userId, period, 'homepage']
+                params: [userId, date, 'homepage']
             },
             product1page: {
                 method: 'storeTrafficPerPage',
-                params: [userId, period, 'product1page']
+                params: [userId, date, 'product1page']
             },
             product2page: {
                 method: 'storeTrafficPerPage',
-                params: [userId, period, 'product2page']
+                params: [userId, date, 'product2page']
             },
             product3page: {
                 method: 'storeTrafficPerPage',
-                params: [userId, period, 'product3page']
+                params: [userId, date, 'product3page']
             },
             product1cart: {
                 method: 'storeProductAddedToCart',
-                params: [userId, period, 1]
+                params: [userId, date, 1]
             },
             product2cart: {
                 method: 'storeProductAddedToCart',
-                params: [userId, period, 2]
+                params: [userId, date, 2]
             },
             product3cart: {
                 method: 'storeProductAddedToCart',
-                params: [userId, period, 3]
+                params: [userId, date, 3]
             },
             product1buy: {
                 method: 'storeProductBought',
-                params: [userId, period, 1]
+                params: [userId, date, 1]
             },
             product2buy: {
                 method: 'storeProductBought',
-                params: [userId, period, 2]
+                params: [userId, date, 2]
             },
             product3buy: {
                 method: 'storeProductBought',
-                params: [userId, period, 3]
+                params: [userId, date, 3]
             }
         };
 
@@ -62,7 +59,7 @@ class DataStoreController {
 
         await this.redisService[_action.method](..._action.params);
 
-        await this.redisService.storeTrafficPerSource(userId, period, source);
+        await this.redisService.storeTrafficPerSource(userId, date, source);
 
         return res.sendStatus(StatusCodes.CREATED);
     }

@@ -1,8 +1,10 @@
+const dayjs = require('dayjs');
 const { StatusCodes } = require('http-status-codes');
 
 class SalesIndexController {
-    constructor(redisService) {
+    constructor(redisService, periodService) {
         this.redisService = redisService;
+        this.periodService = periodService;
     }
 
     async invoke(req, res) {
@@ -30,7 +32,10 @@ class SalesIndexController {
     }
 
     async _search(period, prefix, search) {
-        const periods = period ? [period] : ['dec_week_1', 'dec_week_2', 'dec_week_3', 'dec_week_4', 'dec_week_5'];
+        const dates =
+            period && typeof period === 'object' && period.from && period.to
+                ? this.periodService.getRangeOfDates(dayjs(period.from), period.to, 'day', [dayjs(period.from)])
+                : this.periodService.getRangeOfDates(dayjs('2015-12-01'), '2015-12-31', 'day', [dayjs('2015-12-01')]);
 
         if (search && typeof search === 'object' && Array.isArray(search)) {
             const results = {};
@@ -49,10 +54,14 @@ class SalesIndexController {
         productsIds.forEach(productId => {
             const _key = `${prefix}:${productId}`;
 
-            periods.forEach(period => keys.push(`${_key}:${period}`));
+            dates.forEach(date => keys.push(`${_key}:${date.format('YYYY-MM-DD')}`));
         });
 
-        return this.redisService.calculateOr(keys);
+        if (keys.length === 0) {
+            return 0;
+        }
+
+        return this.redisService.calculateSum(keys);
     }
 }
 

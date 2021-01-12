@@ -1,27 +1,29 @@
+const dayjs = require('dayjs');
 const { StatusCodes } = require('http-status-codes');
 
 class TrafficIndexController {
-    constructor(redisService) {
+    constructor(redisService, periodService) {
         this.redisService = redisService;
+        this.periodService = periodService;
     }
 
     async invoke(req, res) {
         const { filter } = req.query;
 
         try {
-            const { period = null, search = null, type = 'source' } = filter ? JSON.parse(filter) : {};
+            const { period = null, search = null, type = 'source', trend = false } = filter ? JSON.parse(filter) : {};
 
             if (search && Array.isArray(search)) {
                 const totals = {};
 
                 for (const item of search) {
-                    totals[`${item}Traffic`] = await this._search(period, item, type);
+                    totals[`${item}Traffic`] = await this._search(period, item, type, trend);
                 }
 
                 return res.send(totals);
             }
 
-            const totalTraffic = await this._search(period, search, type);
+            const totalTraffic = await this._search(period, search, type, trend);
 
             return res.send({ totalTraffic });
         } catch (err) {
@@ -35,18 +37,11 @@ class TrafficIndexController {
         }
     }
 
-    async _search(period, search, type) {
-        if (period instanceof Object && Array.isArray(period)) {
-            const results = {};
-
-            for (const p of period) {
-                results[p] = await this._search(p, search, type);
-            }
-
-            return results;
-        }
-
-        const periods = period ? [period] : ['dec_week_1', 'dec_week_2', 'dec_week_3', 'dec_week_4', 'dec_week_5'];
+    async _search(period, search, type, trend) {
+        const dates =
+            period && typeof period === 'object' && period.from && period.to
+                ? this.periodService.getRangeOfDates(dayjs(period.from), period.to, 'day', [dayjs(period.from)])
+                : this.periodService.getRangeOfDates(dayjs('2015-12-01'), '2015-12-31', 'day', [dayjs('2015-12-01')]);
 
         const searches = search ? [search] : ['google', 'facebook', 'email', 'direct', 'referral', 'none'];
 
@@ -54,15 +49,33 @@ class TrafficIndexController {
 
         const keys = [];
 
-        searches.forEach(_search => {
+        const _trend = {};
+
+        for (const _search of searches) {
             const _key = `${prefix}:${_search}`;
 
-            periods.forEach(period => keys.push(`${_key}:${period}`));
-        });
+            for (const date of dates) {
+                const formatedDate = date.format('YYYY-MM-DD');
 
-        const total = await this.redisService.calculateOr(keys);
+                const key = `${_key}:${formatedDate}`;
 
-        return total;
+                if (trend) {
+                    _trend[formatedDate] = await this.redisService.count(key);
+                }
+
+                keys.push(key);
+            }
+        }
+
+        if (keys.length === 0) {
+            return 0;
+        }
+
+        const total = await this.redisService.calculateUniques(keys);
+
+        const result = trend ? { total, trend: _trend } : total;
+
+        return result;
     }
 }
 

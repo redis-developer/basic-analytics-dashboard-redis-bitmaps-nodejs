@@ -25,7 +25,8 @@ export default {
         return {
             period: null,
             loading: false,
-            datasets: []
+            datasets: [],
+            labels: []
         };
     },
 
@@ -41,35 +42,21 @@ export default {
                 'rgba(0, 0, 0, 0)'
             ];
 
+            const borderColorGenerator = borderColor => {
+                const colors = [];
+
+                for (let i = 0; i < 31; i++) {
+                    colors.push(borderColor);
+                }
+
+                return colors;
+            };
+
             const boderColors = [
-                [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(255, 99, 132, 1)'
-                ],
-                [
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)'
-                ],
-                [
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(255, 206, 86, 1)'
-                ],
-                [
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(75, 192, 192, 1)'
-                ]
+                borderColorGenerator('rgba(255, 99, 132, 1)'),
+                borderColorGenerator('rgba(54, 162, 235, 1)'),
+                borderColorGenerator('rgba(255, 206, 86, 1)'),
+                borderColorGenerator('rgba(75, 192, 192, 1)')
             ];
 
             const borderWidth = 1;
@@ -77,7 +64,7 @@ export default {
             const labels = ['Homepage', 'Product1 Page', 'Product2 Page', 'Product3 Page'];
 
             const chartData = {
-                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5'],
+                labels: this.labels,
                 datasets: []
             };
 
@@ -109,49 +96,64 @@ export default {
             this.loading = true;
 
             const periods = {
-                dec_week_1: ['dec_week_1'],
-                dec_week_2: ['dec_week_1', 'dec_week_2'],
-                dec_week_3: ['dec_week_3', 'dec_week_2', 'dec_week_1'],
-                dec_week_4: ['dec_week_4', 'dec_week_3', 'dec_week_2', 'dec_week_1'],
-                dec_week_5: ['dec_week_5', 'dec_week_4', 'dec_week_3', 'dec_week_2', 'dec_week_1']
+                dec_week_1: {
+                    from: '2015-12-01',
+                    to: '2015-12-07'
+                },
+                dec_week_2: {
+                    from: '2015-12-08',
+                    to: '2015-12-14'
+                },
+                dec_week_3: {
+                    from: '2015-12-15',
+                    to: '2015-12-21'
+                },
+                dec_week_4: {
+                    from: '2015-12-22',
+                    to: '2015-12-28'
+                },
+                dec_week_5: {
+                    from: '2015-12-29',
+                    to: '2015-12-31'
+                }
             };
 
-            const _period = !period ? periods.dec_week_5 : periods[period];
+            const filter = {
+                search: ['homepage', 'product1page', 'product2page', 'product3page'],
+                type: 'page',
+                trend: true
+            };
+
+            if (period) {
+                filter.period = periods[period];
+            }
 
             const {
-                homepageTraffic,
-                product1pageTraffic,
-                product2pageTraffic,
-                product3pageTraffic
-            } = await this.fetchTraffic({
-                filter: {
-                    period: _period,
-                    search: ['homepage', 'product1page', 'product2page', 'product3page'],
-                    type: 'page'
-                }
-            });
+                homepageTraffic: { trend: homepageTrend },
+                product1pageTraffic: { trend: product1pageTrend },
+                product2pageTraffic: { trend: product2pageTrend },
+                product3pageTraffic: { trend: product3pageTrend }
+            } = await this.fetchTraffic({ filter });
 
             this.loading = false;
             this.datasets = [];
+            this.labels = [];
 
             const homepageData = [];
             const product1pageData = [];
             const product2pageData = [];
             const product3pageData = [];
 
-            for (let i = 1; i <= 5; i++) {
-                if (
-                    typeof homepageTraffic[`dec_week_${i}`] !== 'undefined' &&
-                    typeof product1pageTraffic[`dec_week_${i}`] !== 'undefined' &&
-                    typeof product2pageTraffic[`dec_week_${i}`] !== 'undefined' &&
-                    typeof product3pageTraffic[`dec_week_${i}`] !== 'undefined'
-                ) {
-                    homepageData.push(homepageTraffic[`dec_week_${i}`]);
-                    product1pageData.push(product1pageTraffic[`dec_week_${i}`]);
-                    product2pageData.push(product2pageTraffic[`dec_week_${i}`]);
-                    product3pageData.push(product3pageTraffic[`dec_week_${i}`]);
-                }
-            }
+            const dates = Object.keys(homepageTrend);
+
+            dates.forEach(date => {
+                homepageData.push(homepageTrend[date]);
+                product1pageData.push(product1pageTrend[date]);
+                product2pageData.push(product2pageTrend[date]);
+                product3pageData.push(product3pageTrend[date]);
+
+                this.labels.push(date);
+            });
 
             this.datasets.push(homepageData, product1pageData, product2pageData, product3pageData);
         }
