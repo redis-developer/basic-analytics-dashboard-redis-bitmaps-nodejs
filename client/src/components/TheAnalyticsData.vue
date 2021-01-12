@@ -1,15 +1,15 @@
 <template>
     <div>
         <v-row>
-            <v-col cols="4">
+            <v-col cols="12" lg="4">
                 <the-total-traffic />
             </v-col>
 
-            <v-col cols="4">
+            <v-col cols="12" lg="4">
                 <the-traffic-per-page />
             </v-col>
 
-            <v-col cols="4">
+            <v-col cols="12" lg="4">
                 <the-trend />
             </v-col>
         </v-row>

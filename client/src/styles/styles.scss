@@ -1,0 +1,19 @@
+#app {
+    @media screen and (min-width: 960px) {
+        background-image: url('../assets/RedisLabs_Illustration.svg');
+        background-repeat: no-repeat;
+        background-size: 22% auto;
+        background-position: 104% -70px;
+    }
+}
+
+.subheader {
+    max-width: 800px;
+    font-size: 110%;
+}
+
+.traffic-card {
+    @media screen and (min-width: 1264px) {
+        height: 650px;
+    }
+}

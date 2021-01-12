@@ -1,7 +1,7 @@
 <template>
     <v-container fluid>
         <v-row>
-            <v-col cols="3">
+            <v-col cols="12" lg="3">
                 <v-card>
                     <v-card-title>Analytics Demo Form</v-card-title>
 
@@ -11,7 +11,7 @@
                 </v-card>
             </v-col>
 
-            <v-col cols="9">
+            <v-col cols="12" lg="9">
                 <v-card>
                     <v-card-title>Analytics Data</v-card-title>
 

@@ -1,5 +1,5 @@
 <template>
-    <v-card :height="650">
+    <v-card class="traffic-card">
         <v-card-title>Traffic per Page</v-card-title>
 
         <v-card-actions>
@@ -8,21 +8,19 @@
 
         <v-card-text>
             <v-row>
-                <v-col cols="6">
+                <v-col cols="12" sm="6">
                     <base-traffic-card title="Homepage" :traffic="homepageTraffic" :loading="loading" />
                 </v-col>
 
-                <v-col cols="6">
+                <v-col cols="12" sm="6">
                     <base-traffic-card title="Product 1 Page" :traffic="product1pageTraffic" :loading="loading" />
                 </v-col>
-            </v-row>
 
-            <v-row>
-                <v-col cols="6">
+                <v-col cols="12" sm="6">
                     <base-traffic-card title="Product 2 Page" :traffic="product2pageTraffic" :loading="loading" />
                 </v-col>
 
-                <v-col cols="6">
+                <v-col cols="12" sm="6">
                     <base-traffic-card title="Product 3 Page" :traffic="product3pageTraffic" :loading="loading" />
                 </v-col>
             </v-row>
