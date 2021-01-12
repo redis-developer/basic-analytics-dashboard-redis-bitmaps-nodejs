@@ -5,9 +5,7 @@ const redisClient = require('./RedisClient');
 class RedisService {
     constructor() {
         this.redis = redisClient;
-        ['SETBIT', 'BITCOUNT', 'BITOP', 'EXPIRE'].forEach(
-            method => (this.redis[method] = promisify(this.redis[method]))
-        );
+        ['SETBIT', 'BITCOUNT', 'BITOP', 'DEL'].forEach(method => (this.redis[method] = promisify(this.redis[method])));
     }
 
     storeTrafficPerPage(userId, period, page) {
@@ -18,6 +16,16 @@ class RedisService {
         return this.redis.SETBIT(`traffic_per_source:${source}:${period}`, userId, 1);
     }
 
+    async storeProductBought(userId, period, productId) {
+        await this.storeProductAddedToCart(userId, period, productId);
+
+        return this.redis.SETBIT(`product_bought:${productId}:${period}`, userId, 1);
+    }
+
+    storeProductAddedToCart(userId, period, productId) {
+        return this.redis.SETBIT(`product_added_to_cart:${productId}:${period}`, userId, 1);
+    }
+
     bitCount(key) {
         return this.redis.BITCOUNT(key);
     }
@@ -26,9 +34,11 @@ class RedisService {
         const key = `or:${faker.random.uuid()}`;
 
         await this.redis.BITOP('OR', key, ...keys);
-        await this.redis.EXPIRE(key, 1);
+        const count = await this.bitCount(key);
 
-        return this.bitCount(key);
+        await this.redis.DEL(key);
+
+        return count;
     }
 }
 

@@ -1,9 +1,8 @@
 const { StatusCodes } = require('http-status-codes');
 
 class TrafficIndexController {
-    constructor(redisService, periodService) {
+    constructor(redisService) {
         this.redisService = redisService;
-        this.periodService = periodService;
     }
 
     async invoke(req, res) {

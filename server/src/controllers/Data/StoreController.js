@@ -27,6 +27,30 @@ class DataStoreController {
             product3page: {
                 method: 'storeTrafficPerPage',
                 params: [userId, period, 'product3page']
+            },
+            product1cart: {
+                method: 'storeProductAddedToCart',
+                params: [userId, period, 1]
+            },
+            product2cart: {
+                method: 'storeProductAddedToCart',
+                params: [userId, period, 2]
+            },
+            product3cart: {
+                method: 'storeProductAddedToCart',
+                params: [userId, period, 3]
+            },
+            product1buy: {
+                method: 'storeProductBought',
+                params: [userId, period, 1]
+            },
+            product2buy: {
+                method: 'storeProductBought',
+                params: [userId, period, 2]
+            },
+            product3buy: {
+                method: 'storeProductBought',
+                params: [userId, period, 3]
             }
         };
 
