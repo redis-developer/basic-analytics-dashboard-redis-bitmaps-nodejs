@@ -9,10 +9,10 @@ class SalesIndexController {
         const { filter } = req.query;
 
         try {
-            const { period = null } = filter ? JSON.parse(filter) : {};
+            const { period = null, search = null } = filter ? JSON.parse(filter) : {};
 
-            const productsAddedToCart = await this._search(period, 'product_added_to_cart');
-            const productsBought = await this._search(period, 'product_bought');
+            const productsAddedToCart = await this._search(period, 'product_added_to_cart', search);
+            const productsBought = await this._search(period, 'product_bought', search);
 
             return res.send({
                 productsAddedToCart,
@@ -29,10 +29,20 @@ class SalesIndexController {
         }
     }
 
-    _search(period, prefix) {
+    async _search(period, prefix, search) {
         const periods = period ? [period] : ['dec_week_1', 'dec_week_2', 'dec_week_3', 'dec_week_4', 'dec_week_5'];
 
-        const productsIds = [1, 2, 3];
+        if (search && typeof search === 'object' && Array.isArray(search)) {
+            const results = {};
+
+            for (const [index, productId] of search.entries()) {
+                results[`product${index + 1}`] = await this._search(period, prefix, productId);
+            }
+
+            return results;
+        }
+
+        const productsIds = search ? [search] : [1, 2, 3];
 
         const keys = [];
 

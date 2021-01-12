@@ -1,11 +1,11 @@
 <template>
-    <base-card class="card" title="Total Traffic" :data="totalTraffic" :loading="loading">
-        <base-period-select @onSelect="fetchTrafficData" />
+    <base-card class="card" title="Total Product Bought" :data="totalProductBought">
+        <base-period-select @onSelect="fetchSalesData" />
     </base-card>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
     components: {
@@ -15,7 +15,7 @@ export default {
 
     data() {
         return {
-            totalTraffic: 0,
+            totalProductBought: 0,
             period: null,
             loading: false
         };
@@ -27,21 +27,21 @@ export default {
 
     watch: {
         refreshSignal() {
-            this.fetchTrafficData(this.period);
+            this.fetchSalesData(this.period);
         }
     },
 
     methods: {
-        ...mapActions({ fetchTraffic: 'traffic/fetch' }),
+        ...mapActions({ fetchSales: 'sales/fetch' }),
 
-        async fetchTrafficData(period) {
+        async fetchSalesData(period) {
             this.period = period;
             this.loading = true;
 
-            const { totalTraffic } = await this.fetchTraffic({ filter: { period } });
+            const { productsBought } = await this.fetchSales({ filter: { period } });
 
             this.loading = false;
-            this.totalTraffic = totalTraffic;
+            this.totalProductBought = productsBought;
         }
     }
 };

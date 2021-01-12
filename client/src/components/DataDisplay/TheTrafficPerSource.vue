@@ -11,34 +11,34 @@
                 <v-col cols="12" lg="9">
                     <v-row>
                         <v-col cols="12" sm="6">
-                            <base-traffic-card title="Google Ads" :traffic="googleTraffic" :loading="loading" />
+                            <base-card title="Google Ads" :data="googleTraffic" :loading="loading" />
                         </v-col>
 
                         <v-col cols="12" sm="6">
-                            <base-traffic-card title="Facebook Ads" :traffic="facebookTraffic" :loading="loading" />
+                            <base-card title="Facebook Ads" :data="facebookTraffic" :loading="loading" />
                         </v-col>
 
                         <v-col cols="12" sm="6">
-                            <base-traffic-card title="Email" :traffic="emailTraffic" :loading="loading" />
+                            <base-card title="Email" :data="emailTraffic" :loading="loading" />
                         </v-col>
 
                         <v-col cols="12" sm="6">
-                            <base-traffic-card title="Direct" :traffic="directTraffic" :loading="loading" />
+                            <base-card title="Direct" :data="directTraffic" :loading="loading" />
                         </v-col>
 
                         <v-col cols="12" sm="6">
-                            <base-traffic-card title="Referral" :traffic="referralTraffic" :loading="loading" />
+                            <base-card title="Referral" :data="referralTraffic" :loading="loading" />
                         </v-col>
 
                         <v-col cols="12" sm="6">
-                            <base-traffic-card title="None" :traffic="noneTraffic" :loading="loading" />
+                            <base-card title="None" :data="noneTraffic" :loading="loading" />
                         </v-col>
                     </v-row>
                 </v-col>
 
                 <v-col cols="12" lg="3">
                     <div style="position: relative">
-                        <the-source-chart :chart-data="chartData" />
+                        <base-pie-chart :chart-data="chartData" />
                     </div>
                 </v-col>
             </v-row>
@@ -51,9 +51,9 @@ import { mapActions, mapGetters } from 'vuex';
 
 export default {
     components: {
-        baseTrafficCard: () => import('@/components/UI/BaseTrafficCard'),
+        baseCard: () => import('@/components/UI/BaseCard'),
         basePeriodSelect: () => import('@/components/UI/BasePeriodSelect'),
-        theSourceChart: () => import('@/components/DataDisplay/Charts/TheSourceChart')
+        basePieChart: () => import('@/components/UI/Charts/BasePieChart')
     },
 
     data() {

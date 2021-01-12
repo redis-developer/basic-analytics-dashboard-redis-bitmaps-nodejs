@@ -1,5 +1,5 @@
 <template>
-    <v-card class="traffic-card">
+    <v-card class="card">
         <v-card-title>Traffic per Page</v-card-title>
 
         <v-card-actions>
@@ -9,19 +9,19 @@
         <v-card-text>
             <v-row>
                 <v-col cols="12" sm="6">
-                    <base-traffic-card title="Homepage" :traffic="homepageTraffic" :loading="loading" />
+                    <base-card title="Homepage" :data="homepageTraffic" :loading="loading" />
                 </v-col>
 
                 <v-col cols="12" sm="6">
-                    <base-traffic-card title="Product 1 Page" :traffic="product1pageTraffic" :loading="loading" />
+                    <base-card title="Product 1 Page" :data="product1pageTraffic" :loading="loading" />
                 </v-col>
 
                 <v-col cols="12" sm="6">
-                    <base-traffic-card title="Product 2 Page" :traffic="product2pageTraffic" :loading="loading" />
+                    <base-card title="Product 2 Page" :data="product2pageTraffic" :loading="loading" />
                 </v-col>
 
                 <v-col cols="12" sm="6">
-                    <base-traffic-card title="Product 3 Page" :traffic="product3pageTraffic" :loading="loading" />
+                    <base-card title="Product 3 Page" :data="product3pageTraffic" :loading="loading" />
                 </v-col>
             </v-row>
         </v-card-text>
@@ -33,7 +33,7 @@ import { mapActions, mapGetters } from 'vuex';
 
 export default {
     components: {
-        baseTrafficCard: () => import('@/components/UI/BaseTrafficCard'),
+        baseCard: () => import('@/components/UI/BaseCard'),
         basePeriodSelect: () => import('@/components/UI/BasePeriodSelect')
     },
 

@@ -6,7 +6,7 @@
             <slot />
         </v-card-actions>
 
-        <v-card-text>{{ traffic }}</v-card-text>
+        <v-card-text>{{ data }}</v-card-text>
 
         <template #progress>
             <v-progress-linear indeterminate />
@@ -21,7 +21,7 @@ export default {
             type: String,
             required: true
         },
-        traffic: {
+        data: {
             type: Number,
             required: false,
             default: 0

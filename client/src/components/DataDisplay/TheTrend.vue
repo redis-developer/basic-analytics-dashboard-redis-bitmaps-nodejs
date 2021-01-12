@@ -1,5 +1,5 @@
 <template>
-    <v-card class="traffic-card" :loading="loading">
+    <v-card class="card" :loading="loading">
         <v-card-title>Trend chart (pages)</v-card-title>
 
         <v-card-actions>
@@ -7,7 +7,7 @@
         </v-card-actions>
 
         <v-card-text>
-            <the-trend-chart :chart-data="chartData" />
+            <base-line-chart :chart-data="chartData" />
         </v-card-text>
     </v-card>
 </template>
@@ -17,7 +17,7 @@ import { mapGetters, mapActions } from 'vuex';
 
 export default {
     components: {
-        theTrendChart: () => import('@/components/DataDisplay/Charts/TheTrendChart'),
+        baseLineChart: () => import('@/components/UI/Charts/BaseLineChart'),
         basePeriodSelect: () => import('@/components/UI/BasePeriodSelect')
     },
 
