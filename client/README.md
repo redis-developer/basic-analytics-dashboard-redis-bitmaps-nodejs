@@ -1,29 +1,12 @@
-# client
-
-## Project setup
+# Redis Analytics Bitmaps UI
 
 ```
-npm install
-```
+# copy file and set proper data inside
+cp .env.example .env
 
-### Compiles and hot-reloads for development
+# install dependencies
+npm cache clean && npm install
 
-```
+# run development mode
 npm run serve
 ```
-
-### Compiles and minifies for production
-
-```
-npm run build
-```
-
-### Lints and fixes files
-
-```
-npm run lint
-```
-
-### Customize configuration
-
-See [Configuration Reference](https://cli.vuejs.org/config/).

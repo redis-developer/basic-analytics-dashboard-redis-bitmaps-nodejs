@@ -1,12 +1,17 @@
-require('dotenv').config({
-    path: process.env.NODE_ENV === 'test' ? '.env.test' : '.env'
-});
+require('dotenv').config();
+
+const { PORT, REDIS_HOST, REDIS_PORT, REDIS_ENDPOINT_URI, REDIS_PASSWORD } = process.env;
+
+const redisEndpointUri = REDIS_ENDPOINT_URI
+    ? REDIS_ENDPOINT_URI.replace(/^(redis\:\/\/)/, '')
+    : `${REDIS_HOST}:${REDIS_PORT}`;
 
 module.exports = {
     server: {
-        port: process.env.SERVER_PORT || 3000
+        port: PORT || 3000
     },
     redis: {
-        uri: `redis://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`
+        uri: `redis://${redisEndpointUri}`,
+        password: REDIS_PASSWORD.length ? REDIS_PASSWORD : undefined
     }
 };

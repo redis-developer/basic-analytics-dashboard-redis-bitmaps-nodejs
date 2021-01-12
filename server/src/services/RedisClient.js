@@ -1,8 +1,8 @@
 const redis = require('redis');
 const {
-    redis: { uri: redisUri }
+    redis: { uri, password }
 } = require('../config');
 
-const redisClient = redis.createClient(redisUri);
+const redisClient = redis.createClient(uri, { password });
 
 module.exports = redisClient;

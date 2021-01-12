@@ -16,7 +16,7 @@ const mutations = {
 
 const actions = {
     save(vuexContext, data) {
-        return axios.post('/data', data);
+        return axios.post('/api/data', data);
     }
 };
 
