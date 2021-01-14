@@ -103,10 +103,6 @@ export default {
     watch: {
         refreshSignal() {
             this.fetchTrafficData(this.period);
-        },
-
-        chartData() {
-            return {};
         }
     },
 

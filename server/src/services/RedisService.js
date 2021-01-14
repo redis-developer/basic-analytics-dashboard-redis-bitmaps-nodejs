@@ -5,7 +5,9 @@ const redisClient = require('./RedisClient');
 class RedisService {
     constructor() {
         this.redis = redisClient;
-        ['SETBIT', 'BITCOUNT', 'BITOP', 'DEL'].forEach(method => (this.redis[method] = promisify(this.redis[method])));
+        ['SETBIT', 'GETBIT', 'BITCOUNT', 'BITOP', 'BITPOS', 'DEL', 'GET', 'SET'].forEach(
+            method => (this.redis[method] = promisify(this.redis[method]))
+        );
     }
 
     storeTrafficPerPage(userId, date, page) {
@@ -26,6 +28,10 @@ class RedisService {
         return this.redis.SETBIT(`product_added_to_cart:${productId}:${date}`, userId, 1);
     }
 
+    storeRegisterUsers(userId, date) {
+        return this.redis.SETBIT(`registration:${date}`, userId, 1);
+    }
+
     count(key) {
         return this.redis.BITCOUNT(key);
     }
@@ -41,15 +47,80 @@ class RedisService {
         return sum;
     }
 
-    async calculateUniques(keys) {
+    async calculateUniques(keys, keep = false) {
         const key = `or:${faker.random.uuid()}`;
 
         await this.redis.BITOP('OR', key, ...keys);
+
+        if (keep) {
+            return key;
+        }
+
         const count = await this.count(key);
 
-        await this.redis.DEL(key);
+        await this.delete(key);
 
         return count;
+    }
+
+    async calculateIntersection(keys, keep = false) {
+        const key = `and:${faker.random.uuid()}`;
+
+        await this.redis.BITOP('AND', key, ...keys);
+
+        if (keep) {
+            return key;
+        }
+
+        const count = await this.count(key);
+
+        await this.delete(key);
+
+        return count;
+    }
+
+    delete(key) {
+        return this.redis.DEL(key);
+    }
+
+    get(key) {
+        return this.redis.GET(key);
+    }
+
+    set(key, value) {
+        if (!key || !value) {
+            return;
+        }
+
+        return this.redis.SET(key, value);
+    }
+
+    getBit(key, bit) {
+        return this.redis.GETBIT(key, bit);
+    }
+
+    async generateArrayFromBits(key, itemPrefix) {
+        let index;
+
+        const result = [];
+
+        if (!key || !itemPrefix) {
+            return result;
+        }
+
+        do {
+            index = await this.redis.BITPOS(key, 1);
+
+            if (index < 0) {
+                break;
+            }
+
+            result.push(`${itemPrefix}${index + 1}`);
+
+            await this.redis.SETBIT(key, index, 0);
+        } while (true);
+
+        return result;
     }
 }
 

@@ -9,6 +9,10 @@ class DataStoreController {
         const { userId, date, action, source } = req.body;
 
         const actions = {
+            register: {
+                method: 'storeRegisterUsers',
+                params: [userId, date]
+            },
             homepage: {
                 method: 'storeTrafficPerPage',
                 params: [userId, date, 'homepage']

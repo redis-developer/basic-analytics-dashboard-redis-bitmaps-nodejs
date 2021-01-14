@@ -1,16 +1,16 @@
 <template>
-    <v-card :height="height" :loading="loading">
-        <v-card-title>{{ title }}</v-card-title>
+    <v-card class="card" :loading="loading">
+        <v-card-title> {{ title }} </v-card-title>
 
         <v-card-actions>
             <slot />
         </v-card-actions>
 
-        <v-card-text>{{ data }}</v-card-text>
-
-        <template #progress>
-            <v-progress-linear indeterminate />
-        </template>
+        <v-card-text>
+            <ul>
+                <li v-for="item of data" :key="item">{{ item }}</li>
+            </ul>
+        </v-card-text>
     </v-card>
 </template>
 
@@ -22,20 +22,17 @@ export default {
             required: true
         },
         data: {
-            type: [Number, String],
+            type: Array,
             required: false,
-            default: 0
+            default: () => []
         },
         loading: {
             type: Boolean,
             required: false,
             default: false
-        },
-        height: {
-            type: Number,
-            required: false,
-            default: null
         }
     }
 };
 </script>
+
+<style></style>
