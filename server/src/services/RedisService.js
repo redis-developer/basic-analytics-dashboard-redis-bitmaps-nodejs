@@ -5,7 +5,7 @@ const redisClient = require('./RedisClient');
 class RedisService {
     constructor() {
         this.redis = redisClient;
-        ['SETBIT', 'GETBIT', 'BITCOUNT', 'BITOP', 'BITPOS', 'DEL', 'GET', 'SET'].forEach(
+        ['SETBIT', 'GETBIT', 'BITCOUNT', 'BITOP', 'BITPOS', 'DEL', 'GET', 'SET', 'INCR', 'SADD'].forEach(
             method => (this.redis[method] = promisify(this.redis[method]))
         );
     }
@@ -97,6 +97,18 @@ class RedisService {
 
     getBit(key, bit) {
         return this.redis.GETBIT(key, bit);
+    }
+
+    setBit(key, bit, value) {
+        return this.redis.SETBIT(key, bit, value);
+    }
+
+    increment(key) {
+        return this.redis.INCR(key);
+    }
+
+    addToSet(key, member) {
+        return this.redis.SADD(key, member);
     }
 
     async generateArrayFromBits(key, itemPrefix) {
