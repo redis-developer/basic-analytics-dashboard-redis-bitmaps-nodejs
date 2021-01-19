@@ -36,15 +36,15 @@ export default {
     },
 
     methods: {
-        ...mapActions({ fetchProducts: 'customers/fetchProducts' }),
+        ...mapActions({ fetchRetention: 'customers/fetchRetention' }),
 
         async fetchProductsData() {
             this.loading = true;
 
-            const { twoDifferentDates } = await this.fetchProducts({ filter: { search: ['twoDifferentDates'] } });
+            const data = await this.fetchRetention({ period: 'anytime' });
 
             this.loading = false;
-            this.customers = twoDifferentDates;
+            this.customers = data;
         }
     }
 };

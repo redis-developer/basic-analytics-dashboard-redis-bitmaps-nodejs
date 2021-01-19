@@ -19,6 +19,12 @@ const actions = {
         const { data } = await axios.get('/api/customers/products', { params });
 
         return data;
+    },
+
+    async fetchRetention(vuexContext, params) {
+        const { data } = await axios.get('/api/customers/retention', { params });
+
+        return data;
     }
 };
 

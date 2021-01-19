@@ -61,43 +61,12 @@ export default {
             this.period = period;
             this.loading = true;
 
-            const periods = {
-                dec_week_1: {
-                    from: '2015-12-01',
-                    to: '2015-12-07'
-                },
-                dec_week_2: {
-                    from: '2015-12-08',
-                    to: '2015-12-14'
-                },
-                dec_week_3: {
-                    from: '2015-12-15',
-                    to: '2015-12-21'
-                },
-                dec_week_4: {
-                    from: '2015-12-22',
-                    to: '2015-12-28'
-                },
-                dec_week_5: {
-                    from: '2015-12-29',
-                    to: '2015-12-31'
-                }
-            };
-
-            const filter = { search: [1, 2, 3] };
-
-            if (period) {
-                filter.period = periods[period];
-            }
-
-            const {
-                productsBought: { product1, product2, product3 }
-            } = await this.fetchSales({ filter });
+            const data = await this.fetchSales({ period, filter: { products: ['product1', 'product2', 'product3'] } });
 
             this.loading = false;
-            this.product1Bought = product1;
-            this.product2Bought = product2;
-            this.product3Bought = product3;
+            this.product1Bought = data.find(obj => obj.value === 'product1').bought;
+            this.product2Bought = data.find(obj => obj.value === 'product2').bought;
+            this.product3Bought = data.find(obj => obj.value === 'product3').bought;
         }
     }
 };

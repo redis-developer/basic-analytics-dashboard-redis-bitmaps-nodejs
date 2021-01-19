@@ -49,10 +49,10 @@ export default {
         async fetchProductsData() {
             this.loading = true;
 
-            const data = await this.fetchProducts({ filter: { search: [this.product] } });
+            const [product] = await this.fetchProducts({ filter: { products: [this.product] } });
 
             this.loading = false;
-            this.customers = data[this.product];
+            this.customers = product.boughtBy;
         }
     }
 };

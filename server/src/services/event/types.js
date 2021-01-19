@@ -1,5 +1,6 @@
 module.exports = {
     BITMAP: 'bitmap',
     SET: 'set',
-    COUNT: 'count'
+    COUNT: 'count',
+    JOIN: 'join'
 };

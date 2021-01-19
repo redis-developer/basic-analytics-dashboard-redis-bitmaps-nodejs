@@ -1,5 +1,5 @@
 const keyGenerator = require('./keyGenerator');
-const { BITMAP, COUNT, SET } = require('./types');
+const { BITMAP, COUNT, SET, JOIN } = require('./types');
 
 class AnalyzerService {
     constructor(prefix, redisService) {
@@ -19,6 +19,12 @@ class AnalyzerService {
 
             case SET:
                 return this.redisService.getSetValues(key);
+
+            case JOIN:
+                return this.redisService.getSetIntersection(
+                    keyGenerator({ ...args.first, prefix: this.prefix, type: SET, timeSpan }),
+                    keyGenerator({ ...args.second, prefix: this.prefix, type: SET, timeSpan })
+                );
         }
     }
 }

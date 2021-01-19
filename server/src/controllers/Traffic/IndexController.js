@@ -1,31 +1,61 @@
 const dayjs = require('dayjs');
 const { StatusCodes } = require('http-status-codes');
+const { BITMAP } = require('../../services/event/types');
 
 class TrafficIndexController {
-    constructor(redisService, periodService) {
+    constructor(redisService, periodService, analyzerService) {
         this.redisService = redisService;
         this.periodService = periodService;
+        this.analyzerService = analyzerService;
     }
 
     async invoke(req, res) {
-        const { filter } = req.query;
+        const { filter, period = '2015-12' } = req.query;
 
         try {
-            const { period = null, search = null, type = 'source', trend = false } = filter ? JSON.parse(filter) : {};
+            const { sources = [], pages = [], total = false } = filter
+                ? JSON.parse(filter)
+                : {
+                      sources: ['facebook', 'google', 'direct', 'email', 'referral', 'none'],
+                      pages: ['homepage', 'product1', 'product2', 'product3'],
+                      total: true
+                  };
 
-            if (search && Array.isArray(search)) {
-                const totals = {};
+            const results = [];
 
-                for (const item of search) {
-                    totals[`${item}Traffic`] = await this._search(period, item, type, trend);
-                }
+            if (total) {
+                const count = await this.analyzerService.analyze(BITMAP, period, { customName: 'global' });
 
-                return res.send(totals);
+                results.push({
+                    count,
+                    type: 'total'
+                });
             }
 
-            const totalTraffic = await this._search(period, search, type, trend);
+            for (const source of sources) {
+                const count = await this.analyzerService.analyze(BITMAP, period, { source });
 
-            return res.send({ totalTraffic });
+                results.push({
+                    count,
+                    type: 'source',
+                    value: source
+                });
+            }
+
+            for (const page of pages) {
+                const count = await this.analyzerService.analyze(BITMAP, period, {
+                    action: 'visit',
+                    page
+                });
+
+                results.push({
+                    count,
+                    type: 'page',
+                    value: page
+                });
+            }
+
+            return res.send(results);
         } catch (err) {
             if (err instanceof SyntaxError) {
                 return res.sendStatus(StatusCodes.BAD_REQUEST);
@@ -35,47 +65,6 @@ class TrafficIndexController {
 
             return res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
         }
-    }
-
-    async _search(period, search, type, trend) {
-        const dates =
-            period && typeof period === 'object' && period.from && period.to
-                ? this.periodService.getRangeOfDates(dayjs(period.from), period.to, 'day', [dayjs(period.from)])
-                : this.periodService.getRangeOfDates(dayjs('2015-12-01'), '2015-12-31', 'day', [dayjs('2015-12-01')]);
-
-        const searches = search ? [search] : ['google', 'facebook', 'email', 'direct', 'referral', 'none'];
-
-        const prefix = type === 'page' ? 'traffic_per_page' : 'traffic_per_source';
-
-        const keys = [];
-
-        const _trend = {};
-
-        for (const _search of searches) {
-            const _key = `${prefix}:${_search}`;
-
-            for (const date of dates) {
-                const formatedDate = date.format('YYYY-MM-DD');
-
-                const key = `${_key}:${formatedDate}`;
-
-                if (trend) {
-                    _trend[formatedDate] = await this.redisService.countBit(key);
-                }
-
-                keys.push(key);
-            }
-        }
-
-        if (keys.length === 0) {
-            return 0;
-        }
-
-        const total = await this.redisService.calculateUniques(keys);
-
-        const result = trend ? { total, trend: _trend } : total;
-
-        return result;
     }
 }
 

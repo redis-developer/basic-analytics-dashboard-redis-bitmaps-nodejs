@@ -89,71 +89,121 @@ export default {
     },
 
     methods: {
-        ...mapActions({ fetchTraffic: 'traffic/fetch' }),
+        ...mapActions({ fetchTrend: 'traffic/fetchTrend' }),
 
         async fetchTrafficData(period) {
             this.period = period;
             this.loading = true;
 
             const periods = {
-                dec_week_1: {
+                '2015-12/1': {
                     from: '2015-12-01',
-                    to: '2015-12-07'
+                    to: '2015-12-07',
+                    labels: [
+                        '2015-12-01',
+                        '2015-12-02',
+                        '2015-12-03',
+                        '2015-12-04',
+                        '2015-12-05',
+                        '2015-12-06',
+                        '2015-12-07'
+                    ]
                 },
-                dec_week_2: {
+                '2015-12/2': {
                     from: '2015-12-08',
-                    to: '2015-12-14'
+                    to: '2015-12-14',
+                    labels: [
+                        '2015-12-08',
+                        '2015-12-09',
+                        '2015-12-10',
+                        '2015-12-11',
+                        '2015-12-12',
+                        '2015-12-13',
+                        '2015-12-14'
+                    ]
                 },
-                dec_week_3: {
+                '2015-12/3': {
                     from: '2015-12-15',
-                    to: '2015-12-21'
+                    to: '2015-12-21',
+                    labels: [
+                        '2015-12-15',
+                        '2015-12-16',
+                        '2015-12-17',
+                        '2015-12-18',
+                        '2015-12-19',
+                        '2015-12-20',
+                        '2015-12-21'
+                    ]
                 },
-                dec_week_4: {
+                '2015-12/4': {
                     from: '2015-12-22',
-                    to: '2015-12-28'
+                    to: '2015-12-28',
+                    labels: [
+                        '2015-12-22',
+                        '2015-12-23',
+                        '2015-12-24',
+                        '2015-12-25',
+                        '2015-12-26',
+                        '2015-12-27',
+                        '2015-12-28'
+                    ]
                 },
-                dec_week_5: {
+                '2015-12/5': {
                     from: '2015-12-29',
-                    to: '2015-12-31'
+                    to: '2015-12-31',
+                    labels: ['2015-12-29', '2015-12-30', '2015-12-31']
                 }
             };
 
-            const filter = {
-                search: ['homepage', 'product1page', 'product2page', 'product3page'],
-                type: 'page',
-                trend: true
-            };
+            const { from, to } = periods[period] || {};
 
-            if (period) {
-                filter.period = periods[period];
-            }
-
-            const {
-                homepageTraffic: { trend: homepageTrend },
-                product1pageTraffic: { trend: product1pageTrend },
-                product2pageTraffic: { trend: product2pageTrend },
-                product3pageTraffic: { trend: product3pageTrend }
-            } = await this.fetchTraffic({ filter });
+            const data = await this.fetchTrend({
+                filter: { pages: ['homepage', 'product1', 'product2', 'product3'] },
+                period: { from, to }
+            });
 
             this.loading = false;
             this.datasets = [];
-            this.labels = [];
+            this.labels = periods[period]
+                ? periods[period].labels
+                : [
+                      '2015-12-01',
+                      '2015-12-02',
+                      '2015-12-03',
+                      '2015-12-04',
+                      '2015-12-05',
+                      '2015-12-06',
+                      '2015-12-07',
+                      '2015-12-08',
+                      '2015-12-09',
+                      '2015-12-10',
+                      '2015-12-11',
+                      '2015-12-12',
+                      '2015-12-13',
+                      '2015-12-14',
+                      '2015-12-15',
+                      '2015-12-16',
+                      '2015-12-17',
+                      '2015-12-18',
+                      '2015-12-19',
+                      '2015-12-20',
+                      '2015-12-21',
+                      '2015-12-22',
+                      '2015-12-23',
+                      '2015-12-24',
+                      '2015-12-25',
+                      '2015-12-26',
+                      '2015-12-27',
+                      '2015-12-28',
+                      '2015-12-29',
+                      '2015-12-30',
+                      '2015-12-31'
+                  ];
 
-            const homepageData = [];
-            const product1pageData = [];
-            const product2pageData = [];
-            const product3pageData = [];
-
-            const dates = Object.keys(homepageTrend);
-
-            dates.forEach(date => {
-                homepageData.push(homepageTrend[date]);
-                product1pageData.push(product1pageTrend[date]);
-                product2pageData.push(product2pageTrend[date]);
-                product3pageData.push(product3pageTrend[date]);
-
-                this.labels.push(date);
-            });
+            const homepageData = data.filter(obj => obj.value === 'homepage').map(obj => obj.count);
+            const product1pageData = data.filter(obj => obj.value === 'product1').map(obj => obj.count);
+            const product2pageData = data.filter(obj => obj.value === 'product2').map(obj => obj.count);
+            const product3pageData = data.filter(obj => obj.value === 'product3').map(obj => obj.count);
 
             this.datasets.push(homepageData, product1pageData, product2pageData, product3pageData);
         }

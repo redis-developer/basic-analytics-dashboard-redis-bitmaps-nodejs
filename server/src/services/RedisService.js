@@ -17,7 +17,8 @@ class RedisService {
             'INCR',
             'SADD',
             'SMEMBERS',
-            'SCARD'
+            'SCARD',
+            'SINTER'
         ].forEach(method => (this.redis[method] = promisify(this.redis[method])));
     }
 
@@ -154,6 +155,10 @@ class RedisService {
 
     getSetLength(key) {
         return this.redis.SCARD(key);
+    }
+
+    getSetIntersection(key1, key2) {
+        return this.redis.SINTER(key1, key2);
     }
 }
 
