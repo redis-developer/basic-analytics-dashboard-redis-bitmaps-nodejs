@@ -1,5 +1,5 @@
-const timeSpans = require('./timeSpans');
-const scopes = require('./scopes');
+const keyGenerator = require('./keyGenerator');
+const { BITMAP, COUNT, SET } = require('./types');
 
 class AnalyzerService {
     constructor(prefix, redisService) {
@@ -7,19 +7,19 @@ class AnalyzerService {
         this.redisService = redisService;
     }
 
-    async analyze(type, timeSpan, scope, { args = {}, timeResolver = null, resolver = null } = {}) {
-        const _timeSpan =
-            typeof timeSpan === 'object' ? `${timeResolver}:${timeSpans[timeResolver](timeSpan)}` : timeSpan;
+    async analyze(type, timeSpan, args) {
+        const key = keyGenerator({ prefix: this.prefix, type, timeSpan, ...args });
 
-        const _scope = scopes[scope](args);
+        switch (type) {
+            case BITMAP:
+                return this.redisService.countBit(key);
 
-        if (!_scope) {
-            return;
+            case COUNT:
+                return this.redisService.get(key).then(value => (value ? parseInt(value) : 0));
+
+            case SET:
+                return this.redisService.getSetValues(key);
         }
-
-        const scopeName = _scope !== scope ? `:${_scope}` : '';
-
-        return `${this.prefix}:${type}:${scope}${scopeName}:${_timeSpan}`;
     }
 }
 

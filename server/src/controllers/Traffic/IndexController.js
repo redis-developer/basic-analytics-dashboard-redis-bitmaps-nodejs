@@ -60,7 +60,7 @@ class TrafficIndexController {
                 const key = `${_key}:${formatedDate}`;
 
                 if (trend) {
-                    _trend[formatedDate] = await this.redisService.count(key);
+                    _trend[formatedDate] = await this.redisService.countBit(key);
                 }
 
                 keys.push(key);

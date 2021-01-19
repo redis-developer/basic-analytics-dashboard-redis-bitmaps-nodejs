@@ -1,51 +1,91 @@
 const dayjs = require('dayjs');
-const timeSpans = require('./timeSpans');
-const scopes = require('./scopes');
+const keyGenerator = require('./keyGenerator');
+const { BITMAP, COUNT, SET } = require('./types');
 
 class EventService {
-    constructor(prefix, redisService) {
+    constructor(prefix, redisService, timeSpanService) {
         this.prefix = prefix;
         this.redisService = redisService;
+        this.timeSpanService = timeSpanService;
     }
 
-    get stores() {
-        const redisService = this.redisService;
+    storeBitmap(key, userId) {
+        return this.redisService.setBit(key, userId, 1);
+    }
 
+    storeCount(key) {
+        return this.redisService.increment(key);
+    }
+
+    storeSet(key, userId) {
+        return this.redisService.addToSet(key, userId);
+    }
+
+    get scopes() {
         return [
-            function (prefix, key, userId) {
-                return redisService.setBit(`${prefix}:bitmap:${key}`, userId, 1);
+            ({ source }) => {
+                return { source };
             },
 
-            async function (prefix, key) {
-                return redisService.increment(`${prefix}:increment:${key}`);
+            ({ action }) => {
+                return { action };
             },
 
-            async function (prefix, key, userId) {
-                return redisService.addToSet(`${prefix}:set:${key}`, userId);
+            ({ source, action }) => {
+                return { action, source };
+            },
+
+            ({ action, page }) => {
+                return { action, page };
+            },
+
+            ({ userId, action }) => {
+                return { userId, action };
+            },
+
+            () => {
+                return { customName: 'global' };
             }
         ];
     }
 
-    async store(userId, date, args = {}) {
-        const keys = Object.keys(timeSpans).flatMap(timeSpansKey => {
-            const timeSpan = timeSpans[timeSpansKey].bind(timeSpans);
+    async storeAll(userId, date, args = {}) {
+        const timeSpans = this.timeSpanService.all(dayjs(date));
 
-            return Object.keys(scopes).flatMap(scopesKey => {
-                const scope = scopes[scopesKey](args);
+        for (const timeSpan of timeSpans) {
+            for (const scope of this.scopes) {
+                const scopedArgs = scope({ ...args, userId });
 
-                if (!scope) {
-                    return [];
+                await this.storeCount(keyGenerator({ prefix: this.prefix, type: COUNT, timeSpan, ...scopedArgs }));
+
+                if (scopedArgs.hasOwnProperty('userId')) {
+                    continue;
                 }
 
-                const scopeName = scope !== scopesKey ? `:${scope}` : '';
+                await this.storeBitmap(
+                    keyGenerator({ prefix: this.prefix, type: BITMAP, timeSpan, ...scopedArgs }),
+                    userId
+                );
 
-                return `${scopesKey}${scopeName}:${timeSpansKey}:${timeSpan(dayjs(date))}`;
-            });
-        });
+                await this.storeSet(keyGenerator({ prefix: this.prefix, type: SET, timeSpan, ...scopedArgs }), userId);
+            }
+        }
+    }
 
-        for (const key of keys) {
-            for (const store of this.stores) {
-                await store(this.prefix, key, userId);
+    async store(type, customName, userId, timeSpans = []) {
+        for (const timeSpan of timeSpans) {
+            const key = keyGenerator({ prefix: this.prefix, type, customName, timeSpan });
+
+            switch (type) {
+                case BITMAP:
+                    await this.storeBitmap(key, userId);
+                    break;
+                case COUNT:
+                    await this.storeCount(key);
+                    break;
+                case SET:
+                    await this.storeSet(key, userId);
+                    break;
             }
         }
     }

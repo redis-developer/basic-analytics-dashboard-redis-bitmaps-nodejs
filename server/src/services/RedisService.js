@@ -5,9 +5,20 @@ const redisClient = require('./RedisClient');
 class RedisService {
     constructor() {
         this.redis = redisClient;
-        ['SETBIT', 'GETBIT', 'BITCOUNT', 'BITOP', 'BITPOS', 'DEL', 'GET', 'SET', 'INCR', 'SADD'].forEach(
-            method => (this.redis[method] = promisify(this.redis[method]))
-        );
+        [
+            'SETBIT',
+            'GETBIT',
+            'BITCOUNT',
+            'BITOP',
+            'BITPOS',
+            'DEL',
+            'GET',
+            'SET',
+            'INCR',
+            'SADD',
+            'SMEMBERS',
+            'SCARD'
+        ].forEach(method => (this.redis[method] = promisify(this.redis[method])));
     }
 
     storeTrafficPerPage(userId, date, page) {
@@ -32,15 +43,11 @@ class RedisService {
         return this.redis.SETBIT(`registration:${date}`, userId, 1);
     }
 
-    count(key) {
-        return this.redis.BITCOUNT(key);
-    }
-
     async calculateSum(keys) {
         let sum = 0;
 
         for (const key of keys) {
-            const count = await this.count(key);
+            const count = await this.countBit(key);
             sum += count;
         }
 
@@ -56,7 +63,7 @@ class RedisService {
             return key;
         }
 
-        const count = await this.count(key);
+        const count = await this.countBit(key);
 
         await this.delete(key);
 
@@ -72,12 +79,38 @@ class RedisService {
             return key;
         }
 
-        const count = await this.count(key);
+        const count = await this.countBit(key);
 
         await this.delete(key);
 
         return count;
     }
+
+    async generateArrayFromBits(key, itemPrefix) {
+        let index;
+
+        const result = [];
+
+        if (!key || !itemPrefix) {
+            return result;
+        }
+
+        do {
+            index = await this.redis.BITPOS(key, 1);
+
+            if (index < 0) {
+                break;
+            }
+
+            result.push(`${itemPrefix}${index + 1}`);
+
+            await this.redis.SETBIT(key, index, 0);
+        } while (true);
+
+        return result;
+    }
+
+    // ----------------------------- //
 
     delete(key) {
         return this.redis.DEL(key);
@@ -103,6 +136,10 @@ class RedisService {
         return this.redis.SETBIT(key, bit, value);
     }
 
+    countBit(key) {
+        return this.redis.BITCOUNT(key);
+    }
+
     increment(key) {
         return this.redis.INCR(key);
     }
@@ -111,28 +148,12 @@ class RedisService {
         return this.redis.SADD(key, member);
     }
 
-    async generateArrayFromBits(key, itemPrefix) {
-        let index;
+    getSetValues(key) {
+        return this.redis.SMEMBERS(key);
+    }
 
-        const result = [];
-
-        if (!key || !itemPrefix) {
-            return result;
-        }
-
-        do {
-            index = await this.redis.BITPOS(key, 1);
-
-            if (index < 0) {
-                break;
-            }
-
-            result.push(`${itemPrefix}${index + 1}`);
-
-            await this.redis.SETBIT(key, index, 0);
-        } while (true);
-
-        return result;
+    getSetLength(key) {
+        return this.redis.SCARD(key);
     }
 }
 
