@@ -1,12 +1,12 @@
 <template>
-    <v-card class="card" :loading="loading">
-        <v-card-title>Trend chart (pages)</v-card-title>
+    <v-card class="card" :loading="loading" outlined>
+        <v-card-title class="pa-3">Trend chart (pages)</v-card-title>
 
-        <v-card-actions>
+        <v-card-actions class="pa-3">
             <base-period-select @onSelect="fetchTrafficData" />
         </v-card-actions>
 
-        <v-card-text>
+        <v-card-text class="pa-3">
             <base-line-chart :chart-data="chartData" />
         </v-card-text>
     </v-card>

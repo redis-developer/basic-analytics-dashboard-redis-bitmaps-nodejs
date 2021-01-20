@@ -1,12 +1,6 @@
 <template>
     <div>
         <v-row>
-            <v-col cols="12">
-                <v-divider />
-            </v-col>
-        </v-row>
-
-        <v-row>
             <v-col cols="12" lg="4">
                 <h2>Traffic Analytics Data</h2>
             </v-col>
@@ -34,12 +28,6 @@
 
         <v-row>
             <v-col cols="12">
-                <v-divider />
-            </v-col>
-        </v-row>
-
-        <v-row>
-            <v-col cols="12">
                 <h2>Sales Analytics Data</h2>
             </v-col>
         </v-row>
@@ -55,12 +43,6 @@
 
             <v-col cols="12" lg="4">
                 <the-share-of-products-bought />
-            </v-col>
-        </v-row>
-
-        <v-row>
-            <v-col cols="12">
-                <v-divider />
             </v-col>
         </v-row>
 

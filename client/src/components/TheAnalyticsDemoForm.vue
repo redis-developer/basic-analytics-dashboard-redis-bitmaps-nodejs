@@ -6,6 +6,7 @@
             item-text="text"
             item-value="value"
             label="Date"
+            outlined
         />
 
         <v-select
@@ -14,6 +15,7 @@
             item-text="text"
             item-value="value"
             label="Came From (Source)"
+            outlined
         />
 
         <v-select
@@ -22,6 +24,7 @@
             item-text="text"
             item-value="value"
             label="User"
+            outlined
         />
 
         <v-select
@@ -30,6 +33,7 @@
             item-text="text"
             item-value="value"
             label="Action"
+            outlined
         />
 
         <v-btn type="submit">Update</v-btn>

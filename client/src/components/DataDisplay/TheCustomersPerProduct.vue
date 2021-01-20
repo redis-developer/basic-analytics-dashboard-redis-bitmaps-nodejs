@@ -1,6 +1,6 @@
 <template>
     <base-collection-card title="Customers who bought only" :data="customers" :loading="loading">
-        <v-select v-model="product" :items="values" item-text="text" item-value="value" label="Product" />
+        <v-select v-model="product" :items="values" item-text="text" item-value="value" label="Product" outlined />
     </base-collection-card>
 </template>
 

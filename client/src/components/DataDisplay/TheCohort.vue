@@ -1,10 +1,12 @@
 <template>
-    <v-card class="card">
-        <v-card-title>Cohort Analysis</v-card-title>
+    <v-card class="card" outlined>
+        <v-card-title class="pa-3">Cohort Analysis</v-card-title>
 
-        <v-card-subtitle> % people who registered in December and then bought some product </v-card-subtitle>
+        <v-card-subtitle class="pa-3">
+            % people who registered in December and then bought some product
+        </v-card-subtitle>
 
-        <v-card-text>
+        <v-card-text class="pa-3">
             <v-row>
                 <v-col cols="12" lg="6">
                     <base-card title="People who registered" :data="register" :loading="loading" />

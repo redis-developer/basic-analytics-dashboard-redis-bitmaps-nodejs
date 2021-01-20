@@ -1,4 +1,8 @@
 #app {
+    * {
+        word-break: normal !important;
+    }
+
     @media screen and (min-width: 960px) {
         background-image: url('../assets/RedisLabs_Illustration.svg');
         background-repeat: no-repeat;
@@ -14,6 +18,6 @@
 
 .card {
     @media screen and (min-width: 1264px) {
-        height: 650px;
+        height: 100%;
     }
 }

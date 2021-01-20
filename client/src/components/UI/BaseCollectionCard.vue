@@ -1,12 +1,12 @@
 <template>
-    <v-card class="card" :loading="loading">
-        <v-card-title> {{ title }} </v-card-title>
+    <v-card class="card" :loading="loading" outlined>
+        <v-card-title class="pa-3"> {{ title }} </v-card-title>
 
-        <v-card-actions>
+        <v-card-actions class="pa-3">
             <slot />
         </v-card-actions>
 
-        <v-card-text>
+        <v-card-text class="pa-3">
             <ul>
                 <li v-for="item of data" :key="item">{{ item }}</li>
             </ul>

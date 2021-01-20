@@ -2,7 +2,7 @@
     <v-container fluid>
         <v-row>
             <v-col cols="12" lg="3">
-                <v-card>
+                <v-card outlined>
                     <v-card-title>Analytics Demo Form</v-card-title>
 
                     <v-card-text>
@@ -12,12 +12,19 @@
             </v-col>
 
             <v-col cols="12" lg="9">
-                <v-card>
-                    <v-card-title>Analytics Data</v-card-title>
+                <v-card outlined>
+                    <v-row>
+                        <v-col cols="6">
+                            <v-card-title>Analytics Data</v-card-title>
+                        </v-col>
 
-                    <v-card-actions>
-                        <v-icon @click="negateRefreshSignal">mdi-refresh</v-icon>
-                    </v-card-actions>
+                        <v-col cols="6">
+                            <v-card-actions>
+                                <v-spacer />
+                                <v-icon @click="negateRefreshSignal">mdi-refresh</v-icon>
+                            </v-card-actions>
+                        </v-col>
+                    </v-row>
 
                     <v-card-text>
                         <the-analytics-data />

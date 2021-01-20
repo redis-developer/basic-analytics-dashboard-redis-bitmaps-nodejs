@@ -1,12 +1,12 @@
 <template>
-    <v-card>
-        <v-card-title>Traffic per Source</v-card-title>
+    <v-card outlined>
+        <v-card-title class="pa-3">Traffic per Source</v-card-title>
 
-        <v-card-actions>
+        <v-card-actions class="pa-3">
             <base-period-select @onSelect="fetchTrafficData" />
         </v-card-actions>
 
-        <v-card-text>
+        <v-card-text class="pa-3">
             <v-row>
                 <v-col cols="12" lg="9">
                     <v-row>

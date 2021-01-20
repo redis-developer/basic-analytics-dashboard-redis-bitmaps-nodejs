@@ -1,6 +1,6 @@
 <template>
     <base-collection-card
-        title="Customer Retention: Customers who bought on tho different dates"
+        title="Customer Retention: Customers who bought on the different dates"
         :data="customers"
         :loading="loading"
     />

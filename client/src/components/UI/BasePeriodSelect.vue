@@ -1,5 +1,5 @@
 <template>
-    <v-select v-model="period" :items="values" item-text="text" item-value="value" label="Time Period" />
+    <v-select v-model="period" :items="values" item-text="text" item-value="value" label="Time Period" outlined />
 </template>
 
 <script>
