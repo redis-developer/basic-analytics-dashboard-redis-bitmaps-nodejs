@@ -1,13 +1,17 @@
 <template>
     <v-card class="card" :loading="loading" outlined>
-        <v-row>
-            <v-col cols="6">
-                <v-card-title class="pr-0 pl-3 py-3">Abandoned Cart</v-card-title>
-            </v-col>
-            <v-col cols="6">
-                <v-card-subtitle class="pr-3 pl-0 py-3">(products: in cart vs bought)</v-card-subtitle>
-            </v-col>
-        </v-row>
+        <v-card-title class="pa-3">
+            <v-tooltip top>
+                <template v-slot:activator="{ on, attrs }">
+                    <v-btn icon v-bind="attrs" v-on="on">
+                        <v-icon> mdi-help-box </v-icon>
+                    </v-btn>
+                </template>
+                <span>Products: in cart vs bought</span>
+            </v-tooltip>
+
+            Abandoned Cart
+        </v-card-title>
 
         <v-card-actions class="pa-3">
             <base-period-select @onSelect="fetchSalesData" />

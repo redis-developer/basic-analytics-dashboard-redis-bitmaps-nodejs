@@ -1,10 +1,17 @@
 <template>
     <v-card class="card" outlined>
-        <v-card-title class="pa-3">Cohort Analysis</v-card-title>
+        <v-card-title class="pa-3">
+            <v-tooltip top>
+                <template v-slot:activator="{ on, attrs }">
+                    <v-btn icon v-bind="attrs" v-on="on">
+                        <v-icon> mdi-help-box </v-icon>
+                    </v-btn>
+                </template>
+                <span>% people who registered in December and then bought some product</span>
+            </v-tooltip>
 
-        <v-card-subtitle class="pa-3">
-            % people who registered in December and then bought some product
-        </v-card-subtitle>
+            Cohort Analysis
+        </v-card-title>
 
         <v-card-text class="pa-3">
             <v-row>
