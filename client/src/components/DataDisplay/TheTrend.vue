@@ -31,7 +31,7 @@ export default {
     },
 
     computed: {
-        ...mapGetters({ refreshSignal: 'data/refreshSignal' }),
+        ...mapGetters({ refreshSignal: 'refreshSignal' }),
 
         chartData() {
             const backgroundColor = [
@@ -89,11 +89,10 @@ export default {
     },
 
     methods: {
-        ...mapActions({ fetchTrend: 'traffic/fetchTrend' }),
+        ...mapActions({ fetchTrend: 'fetchTrend' }),
 
         async fetchTrafficData(period) {
             this.period = period;
-            this.loading = true;
 
             const periods = {
                 '2015-12/1': {
@@ -157,12 +156,13 @@ export default {
 
             const { from, to } = periods[period] || {};
 
+            this.loading = true;
+
             const data = await this.fetchTrend({
                 filter: { pages: ['homepage', 'product1', 'product2', 'product3'] },
                 period: { from, to }
             });
 
-            this.loading = false;
             this.datasets = [];
             this.labels = periods[period]
                 ? periods[period].labels
@@ -206,6 +206,7 @@ export default {
             const product3pageData = data.filter(obj => obj.value === 'product3').map(obj => obj.count);
 
             this.datasets.push(homepageData, product1pageData, product2pageData, product3pageData);
+            this.loading = false;
         }
     }
 };

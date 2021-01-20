@@ -9,8 +9,8 @@ import { mapActions, mapMutations } from 'vuex';
 
 export default {
     methods: {
-        ...mapActions({ flush: 'admin/flush' }),
-        ...mapMutations({ negateRefreshSignal: 'data/NEGATE_REFRESH_SIGNAL' }),
+        ...mapActions({ flush: 'flush' }),
+        ...mapMutations({ negateRefreshSignal: 'NEGATE_REFRESH_SIGNAL' }),
 
         async handleFlush() {
             await this.flush();

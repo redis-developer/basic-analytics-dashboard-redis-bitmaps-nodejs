@@ -17,12 +17,12 @@ export default {
     data() {
         return {
             customers: [],
-            loading: false
+            loading: true
         };
     },
 
     computed: {
-        ...mapGetters({ refreshSignal: 'data/refreshSignal' })
+        ...mapGetters({ refreshSignal: 'refreshSignal' })
     },
 
     watch: {
@@ -36,15 +36,15 @@ export default {
     },
 
     methods: {
-        ...mapActions({ fetchRetention: 'customers/fetchRetention' }),
+        ...mapActions({ fetchRetention: 'fetchRetention' }),
 
         async fetchProductsData() {
             this.loading = true;
 
             const data = await this.fetchRetention({ period: 'anytime' });
 
-            this.loading = false;
             this.customers = data;
+            this.loading = false;
         }
     }
 };

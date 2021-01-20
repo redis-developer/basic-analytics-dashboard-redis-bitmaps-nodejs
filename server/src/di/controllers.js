@@ -1,7 +1,7 @@
 module.exports = {
     services: {
-        'controllers.admin.clearRedis': {
-            class: 'controllers/Admin/ClearRedisController',
+        'controllers.flush': {
+            class: 'controllers/FlushController',
             arguments: ['@services.redis']
         },
         'controllers.data.storeController': {

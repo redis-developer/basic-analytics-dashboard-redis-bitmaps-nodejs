@@ -2,9 +2,9 @@ const express = require('express');
 const router = express.Router();
 
 module.exports = di => {
-    const clearRedisController = di.get('controllers.admin.clearRedis');
+    const flushController = di.get('controllers.flush');
 
-    router.delete('/', (...args) => clearRedisController.invoke(...args));
+    router.delete('/', (...args) => flushController.invoke(...args));
 
     return router;
 };

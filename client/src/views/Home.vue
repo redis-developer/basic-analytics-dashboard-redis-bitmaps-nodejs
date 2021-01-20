@@ -38,7 +38,7 @@ export default {
     },
 
     methods: {
-        ...mapMutations({ negateRefreshSignal: 'data/NEGATE_REFRESH_SIGNAL' })
+        ...mapMutations({ negateRefreshSignal: 'NEGATE_REFRESH_SIGNAL' })
     }
 };
 </script>

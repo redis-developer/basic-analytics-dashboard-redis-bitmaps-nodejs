@@ -35,7 +35,7 @@ export default {
     },
 
     computed: {
-        ...mapGetters({ refreshSignal: 'data/refreshSignal' }),
+        ...mapGetters({ refreshSignal: 'refreshSignal' }),
 
         chartData() {
             return {
@@ -58,7 +58,7 @@ export default {
     },
 
     methods: {
-        ...mapActions({ fetchSales: 'sales/fetch' }),
+        ...mapActions({ fetchSales: 'fetchSales' }),
 
         async fetchSalesData(period) {
             this.period = period;
@@ -66,9 +66,9 @@ export default {
 
             const [total] = await this.fetchSales({ period, filter: { total: true } });
 
-            this.loading = false;
             this.productBought = total.bought;
             this.productsAddedToCart = total.addedToCart;
+            this.loading = false;
         }
     }
 };

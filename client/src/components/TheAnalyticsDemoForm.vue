@@ -105,8 +105,8 @@ export default {
     },
 
     methods: {
-        ...mapActions({ saveData: 'data/save' }),
-        ...mapMutations({ negateRefreshSignal: 'data/NEGATE_REFRESH_SIGNAL' }),
+        ...mapActions({ saveData: 'saveData' }),
+        ...mapMutations({ negateRefreshSignal: 'NEGATE_REFRESH_SIGNAL' }),
 
         async submitForm() {
             await this.saveData(this.form);

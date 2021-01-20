@@ -45,7 +45,7 @@ export default {
     },
 
     computed: {
-        ...mapGetters({ refreshSignal: 'data/refreshSignal' }),
+        ...mapGetters({ refreshSignal: 'refreshSignal' }),
 
         chartData() {
             return {
@@ -77,17 +77,17 @@ export default {
     },
 
     methods: {
-        ...mapActions({ fetchCohort: 'customers/fetchCohort' }),
+        ...mapActions({ fetchCohort: 'fetchCohort' }),
 
         async fetchCohortData() {
             this.loading = true;
 
             const { register, registerThenBought, dropoff } = await this.fetchCohort();
 
-            this.loading = false;
             this.register = register;
             this.registerThenBought = registerThenBought;
             this.dropoff = dropoff;
+            this.loading = false;
         }
     }
 };

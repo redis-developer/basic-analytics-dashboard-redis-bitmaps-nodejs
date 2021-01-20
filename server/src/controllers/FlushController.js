@@ -1,6 +1,6 @@
 const { StatusCodes } = require('http-status-codes');
 
-class AdminClearRedisController {
+class FlushController {
     constructor(redisService) {
         this.redisService = redisService;
     }
@@ -12,4 +12,4 @@ class AdminClearRedisController {
     }
 }
 
-module.exports = AdminClearRedisController;
+module.exports = FlushController;

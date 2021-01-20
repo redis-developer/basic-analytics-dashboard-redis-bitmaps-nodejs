@@ -49,7 +49,7 @@ export default {
     },
 
     computed: {
-        ...mapGetters({ refreshSignal: 'data/refreshSignal' })
+        ...mapGetters({ refreshSignal: 'refreshSignal' })
     },
 
     watch: {
@@ -59,7 +59,7 @@ export default {
     },
 
     methods: {
-        ...mapActions({ fetchTraffic: 'traffic/fetch' }),
+        ...mapActions({ fetchTraffic: 'fetchTraffic' }),
 
         async fetchTrafficData(period) {
             this.period = period;
@@ -70,11 +70,11 @@ export default {
                 period
             });
 
-            this.loading = false;
             this.homepageTraffic = data.find(obj => obj.value === 'homepage').count;
             this.product1pageTraffic = data.find(obj => obj.value === 'product1').count;
             this.product2pageTraffic = data.find(obj => obj.value === 'product2').count;
             this.product3pageTraffic = data.find(obj => obj.value === 'product3').count;
+            this.loading = false;
         }
     }
 };

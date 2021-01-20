@@ -1,5 +1,5 @@
 <template>
-    <base-card class="card" title="Total Product Bought" :data="totalProductBought">
+    <base-card class="card" title="Total Product Bought" :data="totalProductBought" :loading="loading">
         <base-period-select @onSelect="fetchSalesData" />
     </base-card>
 </template>
@@ -22,7 +22,7 @@ export default {
     },
 
     computed: {
-        ...mapGetters({ refreshSignal: 'data/refreshSignal' })
+        ...mapGetters({ refreshSignal: 'refreshSignal' })
     },
 
     watch: {
@@ -32,7 +32,7 @@ export default {
     },
 
     methods: {
-        ...mapActions({ fetchSales: 'sales/fetch' }),
+        ...mapActions({ fetchSales: 'fetchSales' }),
 
         async fetchSalesData(period) {
             this.period = period;
@@ -40,8 +40,8 @@ export default {
 
             const [total] = await this.fetchSales({ period, filter: { total: true } });
 
-            this.loading = false;
             this.totalProductBought = total.bought;
+            this.loading = false;
         }
     }
 };

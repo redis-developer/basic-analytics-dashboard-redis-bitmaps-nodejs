@@ -26,7 +26,7 @@ export default {
     },
 
     computed: {
-        ...mapGetters({ refreshSignal: 'data/refreshSignal' })
+        ...mapGetters({ refreshSignal: 'refreshSignal' })
     },
 
     watch: {
@@ -44,15 +44,15 @@ export default {
     },
 
     methods: {
-        ...mapActions({ fetchProducts: 'customers/fetchProducts' }),
+        ...mapActions({ fetchProducts: 'fetchProducts' }),
 
         async fetchProductsData() {
             this.loading = true;
 
             const [product] = await this.fetchProducts({ filter: { products: [this.product] } });
 
-            this.loading = false;
             this.customers = product.boughtBy;
+            this.loading = false;
         }
     }
 };

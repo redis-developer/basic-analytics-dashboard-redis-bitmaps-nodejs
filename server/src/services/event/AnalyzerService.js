@@ -7,7 +7,7 @@ class AnalyzerService {
         this.redisService = redisService;
     }
 
-    async analyze(type, timeSpan, args) {
+    analyze(type, timeSpan, args) {
         const key = keyGenerator({ prefix: this.prefix, type, timeSpan, ...args });
 
         switch (type) {

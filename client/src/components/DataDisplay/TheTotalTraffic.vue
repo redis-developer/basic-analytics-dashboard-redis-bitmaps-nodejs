@@ -22,7 +22,7 @@ export default {
     },
 
     computed: {
-        ...mapGetters({ refreshSignal: 'data/refreshSignal' })
+        ...mapGetters({ refreshSignal: 'refreshSignal' })
     },
 
     watch: {
@@ -32,7 +32,7 @@ export default {
     },
 
     methods: {
-        ...mapActions({ fetchTraffic: 'traffic/fetch' }),
+        ...mapActions({ fetchTraffic: 'fetchTraffic' }),
 
         async fetchTrafficData(period) {
             this.period = period;
@@ -40,8 +40,8 @@ export default {
 
             const [totalTraffic] = await this.fetchTraffic({ filter: { total: true }, period });
 
-            this.loading = false;
             this.totalTraffic = totalTraffic.count;
+            this.loading = false;
         }
     }
 };

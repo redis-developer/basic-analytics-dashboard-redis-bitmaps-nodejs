@@ -70,7 +70,7 @@ export default {
     },
 
     computed: {
-        ...mapGetters({ refreshSignal: 'data/refreshSignal' }),
+        ...mapGetters({ refreshSignal: 'refreshSignal' }),
 
         chartData() {
             return {
@@ -107,7 +107,7 @@ export default {
     },
 
     methods: {
-        ...mapActions({ fetchTraffic: 'traffic/fetch' }),
+        ...mapActions({ fetchTraffic: 'fetchTraffic' }),
 
         async fetchTrafficData(period) {
             this.period = period;
@@ -118,13 +118,13 @@ export default {
                 period
             });
 
-            this.loading = false;
             this.googleTraffic = data.find(obj => obj.value === 'google').count;
             this.facebookTraffic = data.find(obj => obj.value === 'facebook').count;
             this.emailTraffic = data.find(obj => obj.value === 'email').count;
             this.directTraffic = data.find(obj => obj.value === 'direct').count;
             this.referralTraffic = data.find(obj => obj.value === 'referral').count;
             this.noneTraffic = data.find(obj => obj.value === 'none').count;
+            this.loading = false;
         }
     }
 };

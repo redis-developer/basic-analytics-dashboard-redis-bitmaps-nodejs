@@ -18,7 +18,7 @@ export default {
     },
 
     computed: {
-        ...mapGetters({ refreshSignal: 'data/refreshSignal' })
+        ...mapGetters({ refreshSignal: 'refreshSignal' })
     },
 
     watch: {
@@ -32,7 +32,7 @@ export default {
     },
 
     methods: {
-        ...mapActions({ fetchProducts: 'customers/fetchProducts' }),
+        ...mapActions({ fetchProducts: 'fetchProducts' }),
 
         async fetchProductsData() {
             this.loading = true;
@@ -43,8 +43,8 @@ export default {
                 period: 'anytime'
             });
 
-            this.loading = false;
             this.customers = product1and2.boughtBy;
+            this.loading = false;
         }
     }
 };
