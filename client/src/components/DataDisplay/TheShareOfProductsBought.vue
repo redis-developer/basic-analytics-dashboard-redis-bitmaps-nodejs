@@ -40,7 +40,7 @@ export default {
                 datasets: [
                     {
                         data: [this.product1Bought, this.product2Bought, this.product3Bought],
-                        backgroundColor: ['rgba(255, 0, 0, 1)', 'rgba(0, 255, 0, 90)', 'rgba(0, 0, 255, 1)'],
+                        backgroundColor: ['rgba(75, 192, 192, 1)', 'rgba(54, 162, 235, 1)', 'rgba(200, 250, 5, 90)'],
                         borderWidth: 0
                     }
                 ]

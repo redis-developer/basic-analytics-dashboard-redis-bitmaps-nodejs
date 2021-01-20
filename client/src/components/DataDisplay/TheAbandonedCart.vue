@@ -1,8 +1,13 @@
 <template>
     <v-card class="card" :loading="loading" outlined>
-        <v-card-title class="pa-3">Abandoned Cart</v-card-title>
-
-        <v-card-subtitle class="pa-3">(products in cart vs products bought)</v-card-subtitle>
+        <v-row>
+            <v-col cols="6">
+                <v-card-title class="pr-0 pl-3 py-3">Abandoned Cart</v-card-title>
+            </v-col>
+            <v-col cols="6">
+                <v-card-subtitle class="pr-3 pl-0 py-3">(products: in cart vs bought)</v-card-subtitle>
+            </v-col>
+        </v-row>
 
         <v-card-actions class="pa-3">
             <base-period-select @onSelect="fetchSalesData" />
@@ -41,7 +46,7 @@ export default {
                 datasets: [
                     {
                         data: [this.productsAddedToCart, this.productBought],
-                        backgroundColor: ['rgba(255, 0, 0, 1)', 'rgba(0, 255, 0, 90)'],
+                        backgroundColor: ['rgba(75, 192, 192, 1)', 'rgba(54, 162, 235, 1)'],
                         borderWidth: 0
                     }
                 ]
