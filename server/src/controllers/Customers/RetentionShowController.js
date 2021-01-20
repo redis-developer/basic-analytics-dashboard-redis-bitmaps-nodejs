@@ -1,9 +1,7 @@
 const { SET } = require('../../services/event/types');
 
 class CustomersRetentionShowController {
-    constructor(redisService, periodService, analyzerService) {
-        this.redisService = redisService;
-        this.periodService = periodService;
+    constructor(analyzerService) {
         this.analyzerService = analyzerService;
     }
 

@@ -25,7 +25,7 @@
         />
 
         <v-select
-            v-model="form.action"
+            v-model="form.actionParams"
             :items="selectValues.actionValues"
             item-text="text"
             item-value="value"
@@ -38,7 +38,7 @@
 
 <script>
 import dayjs from 'dayjs';
-import { mapActions } from 'vuex';
+import { mapActions, mapMutations } from 'vuex';
 
 export default {
     props: {
@@ -74,7 +74,7 @@ export default {
                 date: dayjs('2015-12-01').format('YYYY-MM-DD'),
                 source: 'facebook',
                 userId: 1,
-                action: 'homepage'
+                actionParams: { action: 'visit', page: 'homepage' }
             },
             selectValues: {
                 dateValues,
@@ -88,17 +88,17 @@ export default {
                 ],
                 userValues,
                 actionValues: [
-                    { text: 'Register', value: 'register' },
-                    { text: 'Visit Homepage', value: 'homepage' },
-                    { text: 'Visit Product1 Page', value: 'product1page' },
-                    { text: 'Visit Product2 Page', value: 'product2page' },
-                    { text: 'Visit Product3 Page', value: 'product3page' },
-                    { text: 'Add Product1 to Cart', value: 'product1cart' },
-                    { text: 'Add Product2 to Cart', value: 'product2cart' },
-                    { text: 'Add Product3 to Cart', value: 'product3cart' },
-                    { text: 'Buy Product1', value: 'product1buy' },
-                    { text: 'Buy Product2', value: 'product2buy' },
-                    { text: 'Buy Product3', value: 'product3buy' }
+                    { text: 'Register', value: { action: 'register' } },
+                    { text: 'Visit Homepage', value: { action: 'visit', page: 'homepage' } },
+                    { text: 'Visit Product1 Page', value: { action: 'visit', page: 'product1' } },
+                    { text: 'Visit Product2 Page', value: { action: 'visit', page: 'product2' } },
+                    { text: 'Visit Product3 Page', value: { action: 'visit', page: 'product3' } },
+                    { text: 'Add Product1 to Cart', value: { action: 'addToCart', page: 'product1' } },
+                    { text: 'Add Product2 to Cart', value: { action: 'addToCart', page: 'product2' } },
+                    { text: 'Add Product3 to Cart', value: { action: 'addToCart', page: 'product3' } },
+                    { text: 'Buy Product1', value: { action: 'buy', page: 'product1' } },
+                    { text: 'Buy Product2', value: { action: 'buy', page: 'product2' } },
+                    { text: 'Buy Product3', value: { action: 'buy', page: 'product3' } }
                 ]
             }
         };
@@ -106,9 +106,21 @@ export default {
 
     methods: {
         ...mapActions({ saveData: 'data/save' }),
+        ...mapMutations({ negateRefreshSignal: 'data/NEGATE_REFRESH_SIGNAL' }),
 
         async submitForm() {
             await this.saveData(this.form);
+
+            this.negateRefreshSignal();
+
+            this.$notify({
+                group: 'main',
+                title: 'Form',
+                text: 'Data updated!',
+                type: 'success',
+                duration: 400,
+                speed: 400
+            });
         }
     }
 };

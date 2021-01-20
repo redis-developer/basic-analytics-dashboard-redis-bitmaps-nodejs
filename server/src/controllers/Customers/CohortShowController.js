@@ -1,10 +1,7 @@
-const dayjs = require('dayjs');
-const { StatusCodes } = require('http-status-codes');
 const { BITMAP } = require('../../services/event/types');
 
 class CustomersCohortShowController {
-    constructor(redisService, analyzerService) {
-        this.redisService = redisService;
+    constructor(analyzerService) {
         this.analyzerService = analyzerService;
     }
 

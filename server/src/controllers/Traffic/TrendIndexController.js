@@ -3,8 +3,7 @@ const dayjs = require('dayjs');
 const { BITMAP } = require('../../services/event/types');
 
 class TrafficTrendIndexController {
-    constructor(redisService, periodService, analyzerService) {
-        this.redisService = redisService;
+    constructor(periodService, analyzerService) {
         this.periodService = periodService;
         this.analyzerService = analyzerService;
     }
@@ -12,63 +11,53 @@ class TrafficTrendIndexController {
     async invoke(req, res) {
         const { filter, period } = req.query;
 
-        try {
-            const { sources = [], pages = [] } = filter
-                ? JSON.parse(filter)
-                : {
-                      sources: ['facebook', 'google', 'direct', 'email', 'referral', 'none'],
-                      pages: ['homepage', 'product1', 'product2', 'product3']
-                  };
+        const defaultFilter = {
+            sources: ['facebook', 'google', 'direct', 'email', 'referral', 'none'],
+            pages: ['homepage', 'product1', 'product2', 'product3']
+        };
 
-            const { from = '2015-12-01', to = '2015-12-31' } = period
-                ? JSON.parse(period)
-                : { from: '2015-12-01', to: '2015-12-31' };
+        const defaultPeriod = { from: '2015-12-01', to: '2015-12-31' };
 
-            const dates = this.periodService.getRangeOfDates(dayjs(from), to, 'day', [dayjs(from)]);
+        const { sources = [], pages = [] } = filter ? JSON.parse(filter) : defaultFilter;
 
-            const results = [];
+        const { from = '2015-12-01', to = '2015-12-31' } = period ? JSON.parse(period) : defaultPeriod;
 
-            for (const date of dates) {
-                const _date = date.format('YYYY-MM-DD');
+        const dates = this.periodService.getRangeOfDates(dayjs(from), to, 'day', [dayjs(from)]);
 
-                for (const source of sources) {
-                    const count = await this.analyzerService.analyze(BITMAP, _date, {
-                        source
-                    });
+        const results = [];
 
-                    results.push({
-                        count,
-                        date: _date,
-                        type: 'source',
-                        value: source
-                    });
-                }
+        for (const date of dates) {
+            const dateFormatted = date.format('YYYY-MM-DD');
 
-                for (const page of pages) {
-                    const count = await this.analyzerService.analyze(BITMAP, _date, {
-                        action: 'visit',
-                        page
-                    });
+            for (const source of sources) {
+                const count = await this.analyzerService.analyze(BITMAP, dateFormatted, {
+                    source
+                });
 
-                    results.push({
-                        count,
-                        date: _date,
-                        type: 'page',
-                        value: page
-                    });
-                }
+                results.push({
+                    count,
+                    date: dateFormatted,
+                    type: 'source',
+                    value: source
+                });
             }
 
-            return res.send(results);
-        } catch (err) {
-            if (err instanceof SyntaxError) {
-                return res.sendStatus(StatusCodes.BAD_REQUEST);
+            for (const page of pages) {
+                const count = await this.analyzerService.analyze(BITMAP, dateFormatted, {
+                    action: 'visit',
+                    page
+                });
+
+                results.push({
+                    count,
+                    date: dateFormatted,
+                    type: 'page',
+                    value: page
+                });
             }
-
-            console.error(err);
-
-            return res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
         }
+
+        return res.send(results);
     }
 }
 

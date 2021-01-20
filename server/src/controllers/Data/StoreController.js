@@ -10,29 +10,9 @@ class DataStoreController {
     }
 
     async invoke(req, res) {
-        const { userId, date, action, source } = req.body;
+        const { userId, date, actionParams, source } = req.body;
 
-        const actionParams = {
-            register: [userId, date, { source, action: 'register' }],
-            homepage: [userId, date, { source, action: 'visit', page: 'homepage' }],
-            product1page: [userId, date, { source, action: 'visit', page: 'product1' }],
-            product2page: [userId, date, { source, action: 'visit', page: 'product2' }],
-            product3page: [userId, date, { source, action: 'visit', page: 'product3' }],
-            product1cart: [userId, date, { source, action: 'addToCart', page: 'product1' }],
-            product2cart: [userId, date, { source, action: 'addToCart', page: 'product2' }],
-            product3cart: [userId, date, { source, action: 'addToCart', page: 'product3' }],
-            product1buy: [userId, date, { source, action: 'buy', page: 'product1' }],
-            product2buy: [userId, date, { source, action: 'buy', page: 'product2' }],
-            product3buy: [userId, date, { source, action: 'buy', page: 'product3' }]
-        };
-
-        const params = actionParams[action];
-
-        if (!params) {
-            return res.sendStatus(StatusCodes.BAD_REQUEST);
-        }
-
-        if (params[2].action === 'buy') {
+        if (actionParams.action === 'buy') {
             const monthRegisterCount = await this.analyzerService.analyze(
                 COUNT,
                 this.timeSpanService.month(dayjs(date)),
@@ -61,7 +41,7 @@ class DataStoreController {
             }
         }
 
-        await this.eventService.storeAll(...params);
+        await this.eventService.storeAll(userId, date, { source, ...actionParams });
 
         return res.sendStatus(StatusCodes.CREATED);
     }

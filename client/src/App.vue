@@ -9,11 +9,19 @@
                 update data with refresh button
             </p>
 
+            <the-flush-button />
+
             <router-view />
+
+            <notifications group="main" position="bottom center" />
         </v-main>
     </v-app>
 </template>
 
 <script>
-export default {};
+export default {
+    components: {
+        theFlushButton: () => import('@/components/UI/TheFlushButton')
+    }
+};
 </script>

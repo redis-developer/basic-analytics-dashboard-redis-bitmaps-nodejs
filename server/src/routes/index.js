@@ -2,7 +2,7 @@ const fs = require('fs');
 const express = require('express');
 const router = express.Router();
 
-module.exports = app => {
+module.exports = di => {
     fs.readdirSync(__dirname).forEach(function (route) {
         route = route.split('.')[0];
 
@@ -10,7 +10,7 @@ module.exports = app => {
             return;
         }
 
-        router.use(`/${route}`, require(`./${route}`)(app));
+        router.use(`/${route}`, require(`./${route}`)(di));
     });
 
     return router;
