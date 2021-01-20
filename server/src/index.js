@@ -12,12 +12,19 @@ const app = express();
 require('express-async-errors');
 
 app.use(helmet());
-app.use(cors());
+app.use(
+    cors({
+        origin(origin, callback) {
+            callback(null, true);
+        },
+        credentials: true
+    })
+);
 app.use(bodyParser.json());
 
 const router = require('./routes')(di);
 
-app.use('/', express.static(path.join(__dirname, '../dist')));
+app.use('/', express.static(path.join(__dirname, '../../client-dist')));
 
 app.use('/api', router);
 
