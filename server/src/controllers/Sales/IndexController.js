@@ -1,4 +1,3 @@
-const { StatusCodes } = require('http-status-codes');
 const { COUNT } = require('../../services/event/types');
 
 class SalesIndexController {

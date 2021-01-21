@@ -1,5 +1,3 @@
-const { StatusCodes } = require('http-status-codes');
-const dayjs = require('dayjs');
 const { BITMAP } = require('../../services/event/types');
 
 class TrafficTrendIndexController {
@@ -22,7 +20,7 @@ class TrafficTrendIndexController {
 
         const { from = '2015-12-01', to = '2015-12-31' } = period ? JSON.parse(period) : defaultPeriod;
 
-        const dates = this.periodService.getRangeOfDates(dayjs(from), to, 'day', [dayjs(from)]);
+        const dates = this.periodService.getRangeOfDates(from, to, 'day');
 
         const results = [];
 

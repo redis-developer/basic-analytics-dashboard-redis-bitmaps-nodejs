@@ -1,4 +1,3 @@
-const dayjs = require('dayjs');
 const { StatusCodes } = require('http-status-codes');
 const { COUNT, SET, BITMAP } = require('../../services/event/types');
 
@@ -13,16 +12,12 @@ class DataStoreController {
         const { userId, date, actionParams, source } = req.body;
 
         if (actionParams.action === 'buy') {
-            const monthRegisterCount = await this.analyzerService.analyze(
-                COUNT,
-                this.timeSpanService.month(dayjs(date)),
-                {
-                    action: 'register',
-                    userId
-                }
-            );
+            const monthRegisterCount = await this.analyzerService.analyze(COUNT, this.timeSpanService.month(date), {
+                action: 'register',
+                userId
+            });
 
-            const todayBuyCount = await this.analyzerService.analyze(COUNT, this.timeSpanService.day(dayjs(date)), {
+            const todayBuyCount = await this.analyzerService.analyze(COUNT, this.timeSpanService.day(date), {
                 action: 'buy',
                 userId
             });
@@ -33,11 +28,11 @@ class DataStoreController {
             });
 
             if (anytimeBuyCount > todayBuyCount) {
-                await this.eventService.store(SET, 'retention-buy', userId, this.timeSpanService.all(dayjs(date)));
+                await this.eventService.store(SET, 'retention-buy', userId, this.timeSpanService.all(date));
             }
 
             if (monthRegisterCount > 0) {
-                await this.eventService.store(BITMAP, 'cohort-buy', userId, this.timeSpanService.all(dayjs(date)));
+                await this.eventService.store(BITMAP, 'cohort-buy', userId, this.timeSpanService.all(date));
             }
         }
 

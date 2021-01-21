@@ -1,5 +1,4 @@
-const { StatusCodes } = require('http-status-codes');
-const { SET, JOIN } = require('../../services/event/types');
+const { SET, SET_AND } = require('../../services/event/types');
 
 class CustomersProductIndexController {
     constructor(analyzerService) {
@@ -7,13 +6,13 @@ class CustomersProductIndexController {
     }
 
     async invoke(req, res) {
-        const { filter, join, period = '2015-12' } = req.query;
+        const { filter, and, period = '2015-12' } = req.query;
 
         const defaultFilter = { products: ['product1', 'product2', 'product3'] };
 
         const { products = [] } = filter ? JSON.parse(filter) : defaultFilter;
 
-        const [firstProduct, secondProduct] = join ? JSON.parse(join) : [];
+        const [firstProduct, secondProduct] = and ? JSON.parse(and) : [];
 
         const results = [];
 
@@ -31,7 +30,7 @@ class CustomersProductIndexController {
 
         if (firstProduct && secondProduct) {
             const boughtBy = await this.analyzerService
-                .analyze(JOIN, period, {
+                .analyze(SET_AND, period, {
                     first: { action: 'buy', page: firstProduct },
                     second: { action: 'buy', page: secondProduct }
                 })

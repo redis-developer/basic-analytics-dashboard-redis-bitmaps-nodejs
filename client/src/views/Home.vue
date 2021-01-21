@@ -6,7 +6,7 @@
                     <v-card-title>Analytics Demo Form</v-card-title>
 
                     <v-card-text>
-                        <the-analytics-demo-form :max-users="15" />
+                        <the-analytics-demo-form />
                     </v-card-text>
                 </v-card>
             </v-col>

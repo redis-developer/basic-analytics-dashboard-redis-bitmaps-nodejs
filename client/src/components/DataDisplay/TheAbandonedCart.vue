@@ -2,7 +2,7 @@
     <v-card class="card" :loading="loading" outlined>
         <v-card-title class="pa-3">
             <v-tooltip top>
-                <template v-slot:activator="{ on, attrs }">
+                <template #activator="{ on, attrs }">
                     <v-btn icon v-bind="attrs" v-on="on">
                         <v-icon> mdi-help-box </v-icon>
                     </v-btn>

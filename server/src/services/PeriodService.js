@@ -1,10 +1,20 @@
 class PeriodService {
+    constructor(dayjs) {
+        this.dayjs = dayjs;
+    }
+
     getRangeOfDates(start, end, key, arr = []) {
-        if (start.isAfter(end)) {
+        const _start = this.dayjs(start);
+
+        if (!arr.length) {
+            arr.push(_start);
+        }
+
+        if (_start.isAfter(end)) {
             throw new Error('start must precede end');
         }
 
-        const next = start.add(1, key).startOf(key);
+        const next = _start.add(1, key).startOf(key);
 
         if (next.isAfter(end, key)) {
             return arr;

@@ -16,19 +16,25 @@ module.exports = {
             class: 'services/redis/RedisService',
             arguments: ['@redis']
         },
+        'services.event.keyGenerator': {
+            class: 'services/event/KeyGeneratorService',
+            arguments: [config.analytics.prefix]
+        },
         'services.event.analyzer': {
             class: 'services/event/AnalyzerService',
-            arguments: [config.analytics.prefix, '@services.redis']
+            arguments: ['@services.redis', '@services.event.keyGenerator']
         },
         'services.event.timeSpan': {
-            class: 'services/event/TimeSpanService'
+            class: 'services/event/TimeSpanService',
+            arguments: ['%dayjs']
         },
         'services.event.event': {
             class: 'services/event/EventService',
-            arguments: [config.analytics.prefix, '@services.redis', '@services.event.timeSpan']
+            arguments: ['@services.redis', '@services.event.timeSpan', '@services.event.keyGenerator']
         },
         'services.period': {
-            class: 'services/PeriodService'
+            class: 'services/PeriodService',
+            arguments: ['%dayjs']
         }
     }
 };

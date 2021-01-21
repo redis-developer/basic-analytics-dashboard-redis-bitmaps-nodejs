@@ -1,12 +1,10 @@
-const dayjs = require('dayjs');
-const keyGenerator = require('./keyGenerator');
 const { BITMAP, COUNT, SET } = require('./types');
 
 class EventService {
-    constructor(prefix, redisService, timeSpanService) {
-        this.prefix = prefix;
+    constructor(redisService, timeSpanService, keyGeneratorService) {
         this.redisService = redisService;
         this.timeSpanService = timeSpanService;
+        this.keyGeneratorService = keyGeneratorService;
     }
 
     storeBitmap(key, userId) {
@@ -50,31 +48,31 @@ class EventService {
     }
 
     async storeAll(userId, date, args = {}) {
-        const timeSpans = this.timeSpanService.all(dayjs(date));
+        const timeSpans = this.timeSpanService.all(date);
 
         for (const timeSpan of timeSpans) {
             for (const scope of this.scopes) {
                 const scopedArgs = scope({ ...args, userId });
 
-                await this.storeCount(keyGenerator({ prefix: this.prefix, type: COUNT, timeSpan, ...scopedArgs }));
+                await this.storeCount(this.keyGeneratorService.generate({ type: COUNT, timeSpan, ...scopedArgs }));
 
                 if (scopedArgs.hasOwnProperty('userId')) {
                     continue;
                 }
 
                 await this.storeBitmap(
-                    keyGenerator({ prefix: this.prefix, type: BITMAP, timeSpan, ...scopedArgs }),
+                    this.keyGeneratorService.generate({ type: BITMAP, timeSpan, ...scopedArgs }),
                     userId
                 );
 
-                await this.storeSet(keyGenerator({ prefix: this.prefix, type: SET, timeSpan, ...scopedArgs }), userId);
+                await this.storeSet(this.keyGeneratorService.generate({ type: SET, timeSpan, ...scopedArgs }), userId);
             }
         }
     }
 
     async store(type, customName, userId, timeSpans = []) {
         for (const timeSpan of timeSpans) {
-            const key = keyGenerator({ prefix: this.prefix, type, customName, timeSpan });
+            const key = this.keyGeneratorService.generate({ type, customName, timeSpan });
 
             switch (type) {
                 case BITMAP:

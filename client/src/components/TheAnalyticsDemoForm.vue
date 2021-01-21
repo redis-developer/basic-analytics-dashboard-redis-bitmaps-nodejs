@@ -45,14 +45,6 @@ import dayjs from 'dayjs';
 import { mapActions, mapMutations } from 'vuex';
 
 export default {
-    props: {
-        maxUsers: {
-            type: Number,
-            required: false,
-            default: 100
-        }
-    },
-
     data() {
         const dateValues = [];
         const userValues = [];
@@ -66,7 +58,7 @@ export default {
             });
         }
 
-        for (let i = 0; i < this.maxUsers; i++) {
+        for (let i = 0; i < 20; i++) {
             userValues.push({
                 text: `User${i + 1}`,
                 value: i

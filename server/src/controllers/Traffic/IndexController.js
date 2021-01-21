@@ -1,4 +1,3 @@
-const { StatusCodes } = require('http-status-codes');
 const { BITMAP } = require('../../services/event/types');
 
 class TrafficIndexController {

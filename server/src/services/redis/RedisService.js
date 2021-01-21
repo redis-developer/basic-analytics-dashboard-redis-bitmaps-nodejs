@@ -4,24 +4,9 @@ class RedisService {
     constructor(redis) {
         this.redis = redis;
 
-        [
-            'SETBIT',
-            'GETBIT',
-            'BITCOUNT',
-            'DEL',
-            'GET',
-            'SET',
-            'INCR',
-            'SADD',
-            'SMEMBERS',
-            'SCARD',
-            'SINTER',
-            'FLUSHALL'
-        ].forEach(method => (this.redis[method] = promisify(this.redis[method])));
-    }
-
-    delete(key) {
-        return this.redis.DEL(key);
+        ['SETBIT', 'BITCOUNT', 'GET', 'SET', 'INCR', 'SADD', 'SMEMBERS', 'SINTER', 'FLUSHALL'].forEach(
+            method => (this.redis[method] = promisify(this.redis[method]))
+        );
     }
 
     get(key) {
@@ -34,10 +19,6 @@ class RedisService {
         }
 
         return this.redis.SET(key, value);
-    }
-
-    getBit(key, bit) {
-        return this.redis.GETBIT(key, bit);
     }
 
     setBit(key, bit, value) {
@@ -58,10 +39,6 @@ class RedisService {
 
     getSetValues(key) {
         return this.redis.SMEMBERS(key);
-    }
-
-    getSetLength(key) {
-        return this.redis.SCARD(key);
     }
 
     getSetIntersection(key1, key2) {
