@@ -2,7 +2,7 @@
 
 Showcases how to implement analytics system using Redis Bitmaps (and other data types) in NodeJS
 
-![alt text](https://github.com/RemoteCraftsmen/redis-analytics-bitmaps/blob/main/preview.png?raw=true)
+![alt text](https://github.com/redis-developer/basic-analytics-dashboard-redis-bitmaps-nodejs/blob/main/preview.png?raw=true)
 
 ## How it works
 ### How the data is stored:
@@ -78,15 +78,59 @@ Is generated key like: `{prefix}:{type}[:custom:{customName}][:user:{userId}][:s
 * Customers who bought Product1 and Product2: `SINTER {prefix}:set:action:buy:page:product1:timeSpan:2015-12 {prefix}:set:action:buy:page:product2:timeSpan:2015-12`
 * Customer Retention (customers who bought on the different dates): `SMEMBERS {prefix}:set:custom:retention-buy:timeSpan:2015-12`
 
+## Hot to run it locally?
+
+### Prerequisites
+
+- Node - v12.19.0
+- NPM - v6.14.8
+- Docker - v19.03.13 (optional)
+
+### Local installation
+
+Go to `/server` folder and then:
+
+```
+# copy file and set proper data inside
+cp .env.example .env
+
+# install dependencies
+npm cache clean && npm install
+
+# run docker compose or install redis manually
+docker network create global
+docker-compose up -d --build
+
+# Run dev server
+npm run dev
+```
+
+Go to `/client` folder and then:
+
+```
+# copy file and set proper data inside
+cp .env.example .env
+
+# install dependencies
+npm cache clean && npm install
+
+# run development mode
+npm run serve
+```
+
 ## Deployment
 
-Check each README.md in client or server folders.
+To make deploys work, you need to create free account in https://redislabs.com/try-free/
 
 ### Google Cloud Run
 
 [![Run on Google
-Cloud](https://deploy.cloud.run/button.svg)](https://deploy.cloud.run/?git_repo=https://github.com/RemoteCraftsmen/redis-analytics-bitmaps.git&revision=feature/deploy-buttons)
+Cloud](https://deploy.cloud.run/button.svg)](https://deploy.cloud.run/?git_repo=https://github.com/redis-developer/basic-analytics-dashboard-redis-bitmaps-nodejs.git&revision=feature/deploy-buttons)
 
 ### Heroku
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+
+### Vercel
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https%3A%2F%2Fgithub.com%2Fredis-developer%2Fbasic-analytics-dashboard-redis-bitmaps-nodejs&env=REDIS_ENDPOINT_URI,REDIS_PASSWORD)
