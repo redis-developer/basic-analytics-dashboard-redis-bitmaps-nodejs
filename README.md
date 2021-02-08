@@ -2,7 +2,7 @@
 
 Showcases how to implement analytics system using Redis Bitmaps (and other data types) in NodeJS
 
-![alt text](https://github.com/redis-developer/basic-analytics-dashboard-redis-bitmaps-nodejs/blob/main/preview.png?raw=true)
+![alt text](https://github.com/RemoteCraftsmen/redis-analytics-bitmaps/blob/main/preview.png?raw=true)
 
 ## How it works
 ### How the data is stored:
@@ -125,7 +125,7 @@ To make deploys work, you need to create free account in https://redislabs.com/t
 ### Google Cloud Run
 
 [![Run on Google
-Cloud](https://deploy.cloud.run/button.svg)](https://deploy.cloud.run/?git_repo=https://github.com/redis-developer/basic-analytics-dashboard-redis-bitmaps-nodejs.git&revision=feature/deploy-buttons)
+Cloud](https://deploy.cloud.run/button.svg)](https://deploy.cloud.run/?git_repo=https://github.com/RemoteCraftsmen/redis-analytics-bitmaps.git&revision=feature/deploy-buttons)
 
 ### Heroku
 
@@ -133,4 +133,4 @@ Cloud](https://deploy.cloud.run/button.svg)](https://deploy.cloud.run/?git_repo=
 
 ### Vercel
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https%3A%2F%2Fgithub.com%2Fredis-developer%2Fbasic-analytics-dashboard-redis-bitmaps-nodejs&env=REDIS_ENDPOINT_URI,REDIS_PASSWORD)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https%3A%2F%2Fgithub.com%2FRemoteCraftsmen%2Fredis-analytics-bitmaps&env=REDIS_ENDPOINT_URI,REDIS_PASSWORD)
