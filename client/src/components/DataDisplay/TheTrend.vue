@@ -1,13 +1,9 @@
 <template>
-    <v-card class="card" :loading="loading" outlined>
-        <v-card-title class="pa-3">Trend chart (pages)</v-card-title>
+    <v-card class="card" :loading="loading">
+        <v-card-title class="px-4">Trend chart (pages)</v-card-title>
 
-        <v-card-actions class="pa-3">
-            <base-period-select @onSelect="fetchTrafficData" />
-        </v-card-actions>
-
-        <v-card-text class="pa-3">
-            <base-line-chart :chart-data="chartData" />
+        <v-card-text class="px-4">
+            <base-line-chart class="px-8" :chart-data="chartData" />
         </v-card-text>
     </v-card>
 </template>
@@ -17,13 +13,11 @@ import { mapGetters, mapActions } from 'vuex';
 
 export default {
     components: {
-        baseLineChart: () => import('@/components/UI/Charts/BaseLineChart'),
-        basePeriodSelect: () => import('@/components/UI/BasePeriodSelect')
+        baseLineChart: () => import('@/components/UI/Charts/BaseLineChart')
     },
 
     data() {
         return {
-            period: null,
             loading: false,
             datasets: [],
             labels: []
@@ -31,7 +25,10 @@ export default {
     },
 
     computed: {
-        ...mapGetters({ refreshSignal: 'refreshSignal' }),
+        ...mapGetters({
+            refreshSignal: 'refreshSignal',
+            period: 'getPeriod'
+        }),
 
         chartData() {
             const backgroundColor = [
@@ -82,9 +79,16 @@ export default {
         }
     },
 
+    created() {
+        this.fetchTrafficData(this.period);
+    },
+
     watch: {
         refreshSignal() {
             this.fetchTrafficData(this.period);
+        },
+        period(period) {
+            this.fetchTrafficData(period);
         }
     },
 
@@ -92,7 +96,6 @@ export default {
         ...mapActions({ fetchTrend: 'fetchTrend' }),
 
         async fetchTrafficData(period) {
-            this.period = period;
 
             const periods = {
                 '2015-12/1': {

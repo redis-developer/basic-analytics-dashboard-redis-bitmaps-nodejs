@@ -1,33 +1,48 @@
 <template>
-    <base-card class="card" title="Total Product Bought" :data="totalProductBought" :loading="loading">
-        <base-period-select @onSelect="fetchSalesData" />
-    </base-card>
+    <v-card class="card" :loading="loading">
+        <v-card-title class="px-4">Product Bought</v-card-title>
+
+        <v-card-text class="px-4">
+            <v-simple-table>
+               <tbody>
+                    <tr>
+                        <td>Total Product Bought</td>
+                        <td>{{ totalProductBought }}</td>
+                    </tr>
+                </tbody>
+            </v-simple-table>
+        </v-card-text>
+    </v-card>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
-    components: {
-        baseCard: () => import('@/components/UI/BaseCard'),
-        basePeriodSelect: () => import('@/components/UI/BasePeriodSelect')
-    },
-
     data() {
         return {
             totalProductBought: 0,
-            period: null,
             loading: false
         };
     },
 
     computed: {
-        ...mapGetters({ refreshSignal: 'refreshSignal' })
+        ...mapGetters({
+            refreshSignal: 'refreshSignal',
+            period: 'getPeriod'
+        })
+    },
+
+    created() {
+        this.fetchSalesData(this.period);
     },
 
     watch: {
         refreshSignal() {
             this.fetchSalesData(this.period);
+        },
+        period(period) {
+            this.fetchSalesData(period);
         }
     },
 
@@ -35,7 +50,6 @@ export default {
         ...mapActions({ fetchSales: 'fetchSales' }),
 
         async fetchSalesData(period) {
-            this.period = period;
             this.loading = true;
 
             const [total] = await this.fetchSales({ period, filter: { total: true } });

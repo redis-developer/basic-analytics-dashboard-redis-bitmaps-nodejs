@@ -1,0 +1,32 @@
+{
+  "app_name": "Redis Analytics Bitmaps demo",
+  "description": "Showcases how to implement analytics system using Redis Bitmaps (and other data types) in NodeJS",
+  "type": "Building Block",
+  "contributed_by": "Redis Labs",
+  "repo_url": "https://github.com/redis-developer/basic-analytics-dashboard-redis-bitmaps-nodejs",
+  "download_url": "https://github.com/redis-developer/basic-analytics-dashboard-redis-bitmaps-nodejs/archive/main.zip",
+  "hosted_url": "",
+  "quick_deploy": "true",
+  "deploy_buttons": [
+    {
+      "heroku": "https://heroku.com/deploy?template=https://github.com/redis-developer/basic-analytics-dashboard-redis-bitmaps-nodejs"
+    },
+    {
+      "vercel": "https://vercel.com/new/git/external?repository-url=https%3A%2F%2Fgithub.com%2Fredis-developer%2Fbasic-analytics-dashboard-redis-bitmaps-nodejs&env=REDIS_ENDPOINT_URI,REDIS_PASSWORD&envDescription=REDIS_ENDPOINT_URI%20is%20required%20at%20least%20to%20connect%20to%20Redis%20clouding%20server"
+    },
+    {
+      "Google": "https://deploy.cloud.run/?git_repo=https://github.com/redis-developer/basic-analytics-dashboard-redis-bitmaps-nodejs.git"
+    }
+  ],
+  "language": ["JavaScript"],
+  "redis_commands": ["SETBIT", "BITCOUNT", "GET", "SET", "INCR", "SADD", "SMEMBERS", "SINTER", "FLUSHALL"],
+  "redis_features": ["bitmap"],
+  "redis_modules": [],
+  "app_image_urls": [
+  "https://github.com/redis-developer/basic-analytics-dashboard-redis-bitmaps-nodejs/blob/main/preview.png?raw=true"
+],
+  "youtube_url": "",
+  "special_tags": [],
+  "verticals": ["Analitics"],
+  "markdown": "https://raw.githubusercontent.com/redislabs-training/redis-sitesearch/master/README.md"
+}

@@ -1,5 +1,5 @@
 <template>
-    <base-collection-card title="Customers who bought Product1 and Product2" :data="customers" :loading="loading" />
+    <base-collection-card title="Customers who bought" subtitle="Customers who bought Product1 and Product2" :data="customers" :loading="loading" />
 </template>
 
 <script>

@@ -1,5 +1,5 @@
 <template>
-    <v-card :height="height" :loading="loading" outlined>
+    <v-card :height="height" :loading="loading">
         <v-card-title class="pa-3">{{ title }}</v-card-title>
 
         <v-card-actions class="pa-3">

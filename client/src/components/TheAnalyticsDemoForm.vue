@@ -1,42 +1,52 @@
 <template>
     <form @submit.prevent="submitForm">
-        <v-select
-            v-model="form.date"
-            :items="selectValues.dateValues"
-            item-text="text"
-            item-value="value"
-            label="Date"
-            outlined
-        />
+            <v-select
+                    v-model="form.date"
+                    :items="selectValues.dateValues"
+                    item-text="text"
+                    item-value="value"
+                    label="Date"
+                    outlined
+            />
 
-        <v-select
-            v-model="form.source"
-            :items="selectValues.sourceValues"
-            item-text="text"
-            item-value="value"
-            label="Came From (Source)"
-            outlined
-        />
+            <v-select
+                    v-model="form.source"
+                    :items="selectValues.sourceValues"
+                    item-text="text"
+                    item-value="value"
+                    label="Came From (Source)"
+                    outlined
+            />
 
-        <v-select
-            v-model="form.userId"
-            :items="selectValues.userValues"
-            item-text="text"
-            item-value="value"
-            label="User"
-            outlined
-        />
+            <v-select
+                    v-model="form.userId"
+                    :items="selectValues.userValues"
+                    item-text="text"
+                    item-value="value"
+                    label="User"
+                    outlined
+            />
 
-        <v-select
-            v-model="form.actionParams"
-            :items="selectValues.actionValues"
-            item-text="text"
-            item-value="value"
-            label="Action"
-            outlined
-        />
+            <v-select
+                    v-model="form.actionParams"
+                    :items="selectValues.actionValues"
+                    item-text="text"
+                    item-value="value"
+                    label="Action"
+                    outlined
+            />
 
-        <v-btn type="submit">Update</v-btn>
+        <div class="text-right">
+            <v-btn type="submit" color="primary" large>
+                Update
+                <v-icon
+                        right
+                        dark
+                >
+                    mdi-cloud-upload
+                </v-icon>
+            </v-btn>
+        </div>
     </form>
 </template>
 

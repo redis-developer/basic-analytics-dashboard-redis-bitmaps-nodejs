@@ -1,12 +1,8 @@
 <template>
-    <v-card class="card" :loading="loading" outlined>
-        <v-card-title class="pa-3">Share of Products bought</v-card-title>
+    <v-card class="card" :loading="loading">
+        <v-card-title class="px-4">Share of Products bought</v-card-title>
 
-        <v-card-actions class="pa-3">
-            <base-period-select @onSelect="fetchSalesData" />
-        </v-card-actions>
-
-        <v-card-text class="pa-3">
+        <v-card-text class="px-10">
             <base-pie-chart :chart-data="chartData" />
         </v-card-text>
     </v-card>
@@ -17,7 +13,6 @@ import { mapActions, mapGetters } from 'vuex';
 
 export default {
     components: {
-        basePeriodSelect: () => import('@/components/UI/BasePeriodSelect'),
         basePieChart: () => import('@/components/UI/Charts/BasePieChart')
     },
 
@@ -26,13 +21,15 @@ export default {
             product1Bought: 0,
             product2Bought: 0,
             product3Bought: 0,
-            period: null,
             loading: false
         };
     },
 
     computed: {
-        ...mapGetters({ refreshSignal: 'refreshSignal' }),
+        ...mapGetters({
+            refreshSignal: 'refreshSignal',
+            period: 'getPeriod'
+        }),
 
         chartData() {
             return {
@@ -48,9 +45,16 @@ export default {
         }
     },
 
+    created() {
+        this.fetchSalesData(this.period);
+    },
+
     watch: {
         refreshSignal() {
             this.fetchSalesData(this.period);
+        },
+        period(period) {
+            this.fetchSalesData(period);
         }
     },
 
@@ -58,7 +62,6 @@ export default {
         ...mapActions({ fetchSales: 'fetchSales' }),
 
         async fetchSalesData(period) {
-            this.period = period;
             this.loading = true;
 
             const data = await this.fetchSales({ period, filter: { products: ['product1', 'product2', 'product3'] } });

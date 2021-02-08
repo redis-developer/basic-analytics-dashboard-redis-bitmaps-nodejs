@@ -1,29 +1,62 @@
 <template>
-    <v-card class="card" outlined>
-        <v-card-title class="pa-3">Traffic per Page</v-card-title>
+    <v-card class="card" :loading="loading">
+        <v-card-title class="px-4">Traffic</v-card-title>
 
-        <v-card-actions class="pa-3">
-            <base-period-select @onSelect="fetchTrafficData" />
-        </v-card-actions>
+        <v-card-text class="px-4">
+            <h2 class="font-weight-regular my-5">Total traffic</h2>
 
-        <v-card-text class="pa-3">
-            <v-row>
-                <v-col cols="12" sm="6">
-                    <base-card title="Homepage" :data="homepageTraffic" :loading="loading" />
-                </v-col>
+            <v-simple-table>
+                <thead>
+                    <tr>
+                        <th class="text-left">
+                            Name
+                        </th>
+                        <th class="text-left">
+                            Visit count
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Total traffic</td>
+                        <td>{{ totalTraffic }}</td>
+                    </tr>
+                </tbody>
+            </v-simple-table>
 
-                <v-col cols="12" sm="6">
-                    <base-card title="Product 1 Page" :data="product1pageTraffic" :loading="loading" />
-                </v-col>
+            <h2 class="font-weight-regular my-5">Traffic per page</h2>
 
-                <v-col cols="12" sm="6">
-                    <base-card title="Product 2 Page" :data="product2pageTraffic" :loading="loading" />
-                </v-col>
+            <v-simple-table>
+                <thead>
+                <tr>
+                    <th class="text-left">
+                        Page name
+                    </th>
+                    <th class="text-left">
+                        Visit count
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Homepage</td>
+                    <td>{{ homepageTraffic }}</td>
+                </tr>
+                <tr>
+                    <td>Product 1 Page</td>
+                    <td>{{ product1pageTraffic }}</td>
+                </tr>
+                <tr>
+                    <td>Product 2 Page</td>
+                    <td>{{ product2pageTraffic }}</td>
+                </tr>
+                <tr>
+                    <td>Product 3 Page</td>
+                    <td>{{ product3pageTraffic }}</td>
+                </tr>
+                </tbody>
+            </v-simple-table>
 
-                <v-col cols="12" sm="6">
-                    <base-card title="Product 3 Page" :data="product3pageTraffic" :loading="loading" />
-                </v-col>
-            </v-row>
         </v-card-text>
     </v-card>
 </template>
@@ -32,29 +65,35 @@
 import { mapActions, mapGetters } from 'vuex';
 
 export default {
-    components: {
-        baseCard: () => import('@/components/UI/BaseCard'),
-        basePeriodSelect: () => import('@/components/UI/BasePeriodSelect')
-    },
-
     data() {
         return {
+            totalTraffic: 0,
             homepageTraffic: 0,
             product1pageTraffic: 0,
             product2pageTraffic: 0,
             product3pageTraffic: 0,
-            period: null,
             loading: false
         };
     },
 
     computed: {
-        ...mapGetters({ refreshSignal: 'refreshSignal' })
+        ...mapGetters({
+            refreshSignal: 'refreshSignal',
+            traffic: 'getTraffic',
+            period: 'getPeriod'
+        })
+    },
+
+    created() {
+        this.fetchTrafficData(this.period);
     },
 
     watch: {
         refreshSignal() {
             this.fetchTrafficData(this.period);
+        },
+        period(period) {
+            this.fetchTrafficData(period);
         }
     },
 
@@ -62,7 +101,6 @@ export default {
         ...mapActions({ fetchTraffic: 'fetchTraffic' }),
 
         async fetchTrafficData(period) {
-            this.period = period;
             this.loading = true;
 
             const data = await this.fetchTraffic({
@@ -70,6 +108,9 @@ export default {
                 period
             });
 
+            const [totalTraffic] = await this.fetchTraffic({ filter: { total: true }, period });
+
+            this.totalTraffic = totalTraffic.count;
             this.homepageTraffic = data.find(obj => obj.value === 'homepage').count;
             this.product1pageTraffic = data.find(obj => obj.value === 'product1').count;
             this.product2pageTraffic = data.find(obj => obj.value === 'product2').count;

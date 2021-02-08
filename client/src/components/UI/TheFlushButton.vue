@@ -1,7 +1,13 @@
 <template>
-    <div class="btn">
-        <v-btn @click="handleFlush">Flush Redis <v-icon>mdi-delete</v-icon></v-btn>
-    </div>
+    <v-btn
+            depressed
+            color="error"
+            large
+            @click="handleFlush"
+    >
+        Flush Redis
+        <v-icon right dark >mdi-delete</v-icon>
+    </v-btn>
 </template>
 
 <script>
@@ -29,25 +35,3 @@ export default {
     }
 };
 </script>
-
-<style scoped>
-.btn {
-    position: fixed;
-    top: 94%;
-    left: 1%;
-}
-
-@media screen and (max-width: 1263px) {
-    .btn {
-        position: static;
-        padding: 1%;
-    }
-}
-
-@media screen and (max-height: 657px) {
-    .btn {
-        position: static;
-        padding: 1%;
-    }
-}
-</style>

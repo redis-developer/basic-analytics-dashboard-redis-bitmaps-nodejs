@@ -1,33 +1,45 @@
 <template>
-    <v-card class="card" outlined>
-        <v-card-title class="pa-3">
-            <v-tooltip top>
-                <template #activator="{ on, attrs }">
-                    <v-btn icon v-bind="attrs" v-on="on">
-                        <v-icon> mdi-help-box </v-icon>
-                    </v-btn>
-                </template>
-                <span>% people who registered in December and then bought some product</span>
-            </v-tooltip>
-
+    <v-card class="card">
+        <v-card-title class="px-4">
             Cohort Analysis
         </v-card-title>
 
-        <v-card-text class="pa-3">
-            <v-row>
-                <v-col cols="12" lg="6">
-                    <base-card title="People who registered" :data="register" :loading="loading" />
-                </v-col>
-                <v-col cols="12" lg="6">
-                    <base-card title="People who bought" :data="registerThenBought" :loading="loading" />
-                </v-col>
-            </v-row>
+        <v-card-subtitle class="px-4">
+            % of people who registered in December and then bought some product
+        </v-card-subtitle>
 
+        <v-card-text class="px-4">
             <v-row>
-                <v-col cols="12" lg="6">
-                    <base-card title="Dropoff" :data="`${dropoff ? dropoff : '0'}%`" :loading="loading" />
+                <v-col cols="12" lg="7">
+                    <v-simple-table>
+                        <thead>
+                        <tr>
+                            <th class="text-left">
+                               Name
+                            </th>
+                            <th class="text-left">
+                                Count
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>People who registered</td>
+                            <td>{{ register }}</td>
+                        </tr>
+                        <tr>
+                            <td>People who bought</td>
+                            <td>{{ registerThenBought }}</td>
+                        </tr>
+                        <tr>
+                            <td>Dropoff</td>
+                            <td>{{ dropoff || '0' }}</td>
+                        </tr>
+                        </tbody>
+                    </v-simple-table>
                 </v-col>
-                <v-col cols="12" lg="6">
+
+                <v-col cols="12" lg="5">
                     <base-horizontal-bar-chart :chart-data="chartData" />
                 </v-col>
             </v-row>
@@ -40,7 +52,6 @@ import { mapActions, mapGetters } from 'vuex';
 
 export default {
     components: {
-        baseCard: () => import('@/components/UI/BaseCard'),
         baseHorizontalBarChart: () => import('@/components/UI/Charts/BaseHorizontalBarChart')
     },
 
@@ -78,7 +89,7 @@ export default {
     watch: {
         refreshSignal() {
             this.fetchCohortData();
-        }
+        },
     },
 
     created() {

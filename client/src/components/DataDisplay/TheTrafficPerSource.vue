@@ -1,42 +1,51 @@
 <template>
-    <v-card outlined>
-        <v-card-title class="pa-3">Traffic per Source</v-card-title>
+    <v-card :loading="loading">
+        <v-card-title class="px-4">Traffic per Source</v-card-title>
 
-        <v-card-actions class="pa-3">
-            <base-period-select @onSelect="fetchTrafficData" />
-        </v-card-actions>
-
-        <v-card-text class="pa-3">
+        <v-card-text class="px-4">
             <v-row>
-                <v-col cols="12" lg="9">
-                    <v-row>
-                        <v-col cols="12" sm="6">
-                            <base-card title="Google Ads" :data="googleTraffic" :loading="loading" />
-                        </v-col>
-
-                        <v-col cols="12" sm="6">
-                            <base-card title="Facebook Ads" :data="facebookTraffic" :loading="loading" />
-                        </v-col>
-
-                        <v-col cols="12" sm="6">
-                            <base-card title="Email" :data="emailTraffic" :loading="loading" />
-                        </v-col>
-
-                        <v-col cols="12" sm="6">
-                            <base-card title="Direct" :data="directTraffic" :loading="loading" />
-                        </v-col>
-
-                        <v-col cols="12" sm="6">
-                            <base-card title="Referral" :data="referralTraffic" :loading="loading" />
-                        </v-col>
-
-                        <v-col cols="12" sm="6">
-                            <base-card title="None" :data="noneTraffic" :loading="loading" />
-                        </v-col>
-                    </v-row>
+                <v-col cols="12" lg="8">
+                    <v-simple-table>
+                        <thead>
+                            <tr>
+                                <th class="text-left">
+                                    Source name
+                                </th>
+                                <th class="text-left">
+                                    Visit count
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Google Ads</td>
+                                <td>{{ googleTraffic }}</td>
+                            </tr>
+                            <tr>
+                                <td>Facebook Ads</td>
+                                <td>{{ facebookTraffic }}</td>
+                            </tr>
+                            <tr>
+                                <td>Email</td>
+                                <td>{{ emailTraffic }}</td>
+                            </tr>
+                            <tr>
+                                <td>Direct</td>
+                                <td>{{ directTraffic }}</td>
+                            </tr>
+                            <tr>
+                                <td>Referral</td>
+                                <td>{{ referralTraffic }}</td>
+                            </tr>
+                            <tr>
+                                <td>None</td>
+                                <td>{{ noneTraffic }}</td>
+                            </tr>
+                        </tbody>
+                    </v-simple-table>
                 </v-col>
 
-                <v-col cols="12" lg="3">
+                <v-col cols="12" lg="4">
                     <div style="position: relative">
                         <base-pie-chart :chart-data="chartData" />
                     </div>
@@ -51,8 +60,6 @@ import { mapActions, mapGetters } from 'vuex';
 
 export default {
     components: {
-        baseCard: () => import('@/components/UI/BaseCard'),
-        basePeriodSelect: () => import('@/components/UI/BasePeriodSelect'),
         basePieChart: () => import('@/components/UI/Charts/BasePieChart')
     },
 
@@ -64,13 +71,15 @@ export default {
             directTraffic: 0,
             referralTraffic: 0,
             noneTraffic: 0,
-            period: null,
             loading: false
         };
     },
 
     computed: {
-        ...mapGetters({ refreshSignal: 'refreshSignal' }),
+        ...mapGetters({
+            refreshSignal: 'refreshSignal',
+            period: 'getPeriod'
+        }),
 
         chartData() {
             return {
@@ -100,9 +109,16 @@ export default {
         }
     },
 
+    created() {
+        this.fetchTrafficData(this.period);
+    },
+
     watch: {
         refreshSignal() {
             this.fetchTrafficData(this.period);
+        },
+        period(period) {
+            this.fetchTrafficData(period);
         }
     },
 
@@ -110,7 +126,6 @@ export default {
         ...mapActions({ fetchTraffic: 'fetchTraffic' }),
 
         async fetchTrafficData(period) {
-            this.period = period;
             this.loading = true;
 
             const data = await this.fetchTraffic({
