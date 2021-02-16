@@ -1,12 +1,20 @@
 <template>
-    <v-btn depressed color="error" large :loading="redisLoading" :disabled="redisLoading" @click="handleFlush">
-        Flush Redis
-        <v-icon right dark>mdi-delete</v-icon>
+    <v-btn
+        depressed
+        color="warning"
+        large
+        :loading="redisLoading"
+        :disabled="redisLoading"
+        style="width: 100%"
+        @click="handleReset"
+    >
+        Reset Data
+        <v-icon right dark>mdi-restart</v-icon>
     </v-btn>
 </template>
 
 <script>
-import { mapActions, mapMutations, mapGetters } from 'vuex';
+import { mapActions, mapGetters, mapMutations } from 'vuex';
 
 export default {
     computed: {
@@ -14,21 +22,21 @@ export default {
     },
 
     methods: {
-        ...mapActions({ flush: 'flush' }),
+        ...mapActions({ reset: 'reset' }),
         ...mapMutations({ negateRefreshSignal: 'NEGATE_REFRESH_SIGNAL', setRedisLoading: 'SET_REDIS_LOADING' }),
 
-        async handleFlush() {
+        async handleReset() {
             this.setRedisLoading(true);
 
             try {
-                await this.flush();
+                await this.reset();
 
                 this.negateRefreshSignal();
 
                 this.$notify({
                     group: 'main',
-                    title: 'Redis',
-                    text: 'Redis flushed!',
+                    title: 'Data',
+                    text: 'Data reseted!',
                     type: 'success',
                     duration: 400,
                     speed: 400

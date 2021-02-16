@@ -15,6 +15,6 @@ module.exports = {
         password: REDIS_PASSWORD.length ? REDIS_PASSWORD : undefined
     },
     analytics: {
-        prefix: 'analytics'
+        prefix: 'rab'
     }
 };
