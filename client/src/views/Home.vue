@@ -17,16 +17,16 @@
                     </v-card-text>
                 </v-card>
 
-                <v-card-actions class="my-4 justify-md-space-around">
-                    <v-btn depressed color="info" large @click="negateRefreshSignal">
+                <v-card-actions class="my-4 justify-space-around flex-wrap">
+                    <v-btn depressed color="info" class="mt-3 mt-lg-0" large @click="negateRefreshSignal">
                         Refresh
                         <v-icon right dark>mdi-refresh</v-icon>
                     </v-btn>
 
                     <the-flush-button />
+                    <the-reset-button />
                 </v-card-actions>
 
-                <the-reset-button />
             </v-col>
 
             <v-col cols="12" lg="9">

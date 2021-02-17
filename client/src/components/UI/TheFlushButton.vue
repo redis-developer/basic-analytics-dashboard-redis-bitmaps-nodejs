@@ -1,5 +1,5 @@
 <template>
-    <v-btn depressed color="error" large :loading="redisLoading" :disabled="redisLoading" @click="handleFlush">
+    <v-btn depressed color="error" large :loading="redisLoading" :disabled="redisLoading" @click="handleFlush" class="mt-3 mt-xl-0">
         Flush Redis
         <v-icon right dark>mdi-delete</v-icon>
     </v-btn>

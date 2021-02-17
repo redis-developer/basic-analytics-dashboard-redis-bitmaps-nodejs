@@ -2,7 +2,9 @@
 
 Showcases how to implement analytics system using Redis Bitmaps (and other data types) in NodeJS
 
-![alt text](https://github.com/RemoteCraftsmen/redis-analytics-bitmaps/blob/main/preview.png?raw=true)
+<a href="https://github.com/RemoteCraftsmen/redis-analytics-bitmaps/blob/main/preview.png?raw=true"><img src="https://github.com/RemoteCraftsmen/redis-analytics-bitmaps/blob/main/preview-min.png?raw=true" width="100%" height="auto"></a>
+<a href="https://github.com/RemoteCraftsmen/redis-analytics-bitmaps/blob/main/preview-2.png?raw=true"><img src="https://github.com/RemoteCraftsmen/redis-analytics-bitmaps/blob/main/preview-2-min.png?raw=true" width="50%" height="auto"></a><a href="https://github.com/RemoteCraftsmen/redis-analytics-bitmaps/blob/main/preview-3.png?raw=true"><img src="https://github.com/RemoteCraftsmen/redis-analytics-bitmaps/blob/main/preview-3-min.png?raw=true" width="50%" height="auto"></a>
+
 
 ## How it works
 ### How the data is stored:

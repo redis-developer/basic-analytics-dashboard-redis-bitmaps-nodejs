@@ -5,8 +5,8 @@
         large
         :loading="redisLoading"
         :disabled="redisLoading"
-        style="width: 100%"
         @click="handleReset"
+        class="mt-3"
     >
         Reset Data
         <v-icon right dark>mdi-restart</v-icon>
