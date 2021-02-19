@@ -37,12 +37,6 @@ Is generated key like: `rab:{type}[:custom:{customName}][:user:{userId}][:source
     * E.g `SADD rab:set:action:addToCart:timeSpan:2015-12/3 8`
 * For each generated key like `rab:bitmap:*`, data is stored like: `SETBIT {key} {userId} 1`.
     * E.g `SETBIT rab:bitmap:action:addToCart:timeSpan:2015-12/3 8 1`
-* Retention data:
-    * Retention means users who bought on two different dates
-    * For each buy action we check if user bought more products anytime than bought on particular day (current purchase not included).
-    * If so, we add user id to set like: `SADD rab:set:custom:retention-buy:timeSpan:{timeSpan} {userId}`
-    * E.g User Id 5 bought 3 products on 2015-12-15. His retention won't be stored (products bought on particular day: 2, products bought anytime: 0).
-    * E.g User Id 3 bought 1 product on 2015-12-15 and before - 1 product on 2015-12-13. His retention will be stored (products bought on particular day: 0, products bought anytime: 1) like: `SADD rab:set:custom:retention-buy:timeSpan:2015-12 3`.
 * Cohort data:
     * We store users who register and then bought some products (action order matters).
     * For each buy action in December we check if user performed register action before (register counter must be greater than zero).
@@ -50,6 +44,13 @@ Is generated key like: `rab:{type}[:custom:{customName}][:user:{userId}][:source
     * E.g User Id 2 bought 2 products on 2015-12-17. He won't be stored.
     * E.g User Id 10 bought 1 product on 2015-12-17 and registered on 2015-12-16. He will be stored like: `SETBIT rab:bitmap:custom:cohort-buy:timeSpan:2015-12 10 1`.
     * We assume that user cannot buy without register.
+* Retention data:
+    * Retention means users who bought on two different dates
+    * For each buy action we check if user bought more products anytime than bought on particular day (current purchase not included).
+    * If so, we add user id to set like: `SADD rab:set:custom:retention-buy:timeSpan:{timeSpan} {userId}`
+    * E.g User Id 5 bought 3 products on 2015-12-15. His retention won't be stored (products bought on particular day: 2, products bought anytime: 0).
+    * E.g User Id 3 bought 1 product on 2015-12-15 and before - 1 product on 2015-12-13. His retention will be stored (products bought on particular day: 0, products bought anytime: 1) like: `SADD rab:set:custom:retention-buy:timeSpan:2015-12 3`.
+
 ### How the data is accessed:
 
 * Total Traffic: 

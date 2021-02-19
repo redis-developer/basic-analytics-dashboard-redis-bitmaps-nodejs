@@ -1,5 +1,10 @@
 <template>
-    <base-collection-card title="Customers who bought only" :data="customers" :loading="loading">
+    <base-collection-card
+        title="Customers who bought only product"
+        subtitle="(anytime)"
+        :data="customers"
+        :loading="loading"
+    >
         <v-select v-model="product" :items="values" item-text="text" item-value="value" label="Product" outlined />
     </base-collection-card>
 </template>
@@ -49,7 +54,7 @@ export default {
         async fetchProductsData() {
             this.loading = true;
 
-            const [product] = await this.fetchProducts({ filter: { products: [this.product] } });
+            const [product] = await this.fetchProducts({ filter: { products: [this.product] }, period: 'anytime' });
 
             this.customers = product.boughtBy;
             this.loading = false;

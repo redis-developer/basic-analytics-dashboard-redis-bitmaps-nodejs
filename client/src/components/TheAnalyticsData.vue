@@ -9,10 +9,8 @@
        </v-card>
 
         <v-alert
-                text
                 dense
-                color="info"
-                class="mt-6 mb-0 mx-1"
+                class="mt-6 mb-0 mx-1 card v-card"
                 border="left"
         >
             <v-row
@@ -20,14 +18,14 @@
                 no-gutters
                 @click="alert = !alert"
             >
-                <v-col class="grow">
+                <v-col class="grow black--text">
                     <h3 class="headline">
                         How it works?
                     </h3>
                 </v-col>
                 <v-col class="shrink">
                     <v-btn
-                        color="info"
+                        color="black"
                         outlined
                     >
                         {{ alert ? 'Collapse' : 'View more'}}
@@ -36,13 +34,13 @@
             </v-row>
 
             <v-divider v-show="alert"
-                class="my-4 info"
+                class="my-4 black"
                 style="opacity: 0.22"
             ></v-divider>
 
             <div v-show="alert">
-                <ol>
-                    <li class="font-weight-bold">How the data is stored:</li>
+                <ol class="black--text">
+                    <li class="font-weight-bold mb-5">How the data is stored:</li>
                     <ul class="mb-5">
                         <li>The event data is stored in various keys and various data types.</li>
                         <ul class="mb-5">
@@ -83,14 +81,6 @@
                         <ul class="mb-5">
                             <li>E.g <code>SETBIT rab:bitmap:action:addToCart:timeSpan:2015-12/3 8 1</code></li>
                         </ul>
-                        <li>Retention data:</li>
-                        <ul class="mb-5">
-                            <li>Retention means users who bought on two different dates</li>
-                            <li>For each buy action we check if user bought more products anytime than bought on particular day (current purchase not included).</li>
-                            <li>If so, we add user id to set like: <code>SADD rab:set:custom:retention-buy:timeSpan:{timeSpan} {userId}</code></li>
-                            <li>E.g User Id 5 bought 3 products on 2015-12-15. His retention won't be stored (products bought on particular day: 2, products bought anytime: 0).</li>
-                            <li>E.g User Id 3 bought 1 product on 2015-12-15 and before - 1 product on 2015-12-13. His retention will be stored (products bought on particular day: 0, products bought anytime: 1) like: <code>SADD rab:set:custom:retention-buy:timeSpan:2015-12 3</code></li>
-                        </ul>
                         <li>Cohort data:</li>
                         <ul class="mb-5">
                             <li>We store users who register and then bought some products (action order matters).</li>
@@ -100,9 +90,17 @@
                             <li>E.g User Id 10 bought 1 product on 2015-12-17 and registered on 2015-12-16. He will be stored like: <code>SETBIT rab:bitmap:custom:cohort-buy:timeSpan:2015-12 10 1</code></li>
                             <li>We assume that user cannot buy without register.</li>
                         </ul>
+                        <li>Retention data:</li>
+                        <ul class="mb-5">
+                            <li>Retention means users who bought on two different dates</li>
+                            <li>For each buy action we check if user bought more products anytime than bought on particular day (current purchase not included).</li>
+                            <li>If so, we add user id to set like: <code>SADD rab:set:custom:retention-buy:timeSpan:{timeSpan} {userId}</code></li>
+                            <li>E.g User Id 5 bought 3 products on 2015-12-15. His retention won't be stored (products bought on particular day: 2, products bought anytime: 0).</li>
+                            <li>E.g User Id 3 bought 1 product on 2015-12-15 and before - 1 product on 2015-12-13. His retention will be stored (products bought on particular day: 0, products bought anytime: 1) like: <code>SADD rab:set:custom:retention-buy:timeSpan:2015-12 3</code></li>
+                        </ul>
                     </ul>
 
-                    <li class="font-weight-bold">How the data is accessed:</li>
+                    <li class="font-weight-bold mb-5">How the data is accessed:</li>
                     <ul class="mb-5">
 
                         <li>Total Traffic:</li>
@@ -191,8 +189,8 @@
                         <ul class="mb-5">
                             <li>E.g <code>SMEMBERS rab:set:action:buy:page:product2:timeSpan:2015-12</code></li>
                         </ul>
-                        <li>Customers who bought Product1 and Product2: <code>SINTER rab:set:action:buy:page:product1:timeSpan:anytime rab:set:action:buy:page:product2:timeSpan:anytime</code></li>
-                        <li>Customer Retention (customers who bought on the different dates): <code>SMEMBERS rab:set:custom:retention-buy:timeSpan:anytime</code></li>
+                        <li class="mb-5">Customers who bought Product1 and Product2: <code>SINTER rab:set:action:buy:page:product1:timeSpan:anytime rab:set:action:buy:page:product2:timeSpan:anytime</code></li>
+                        <li class="mb-5">Customer Retention (customers who bought on the different dates): <code>SMEMBERS rab:set:custom:retention-buy:timeSpan:anytime</code></li>
                     </ul>
                 </ol>
              </div>
