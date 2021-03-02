@@ -38,7 +38,7 @@
 
         <div class="text-right">
             <v-btn type="submit" color="primary" large>
-                Update
+                Create Data
                 <v-icon
                         right
                         dark

@@ -18,15 +18,9 @@
                 </v-card>
 
                 <v-card-actions class="my-4 justify-space-around flex-wrap">
-                    <v-btn depressed color="info" class="mt-3 mt-lg-0" large @click="negateRefreshSignal">
-                        Refresh
-                        <v-icon right dark>mdi-refresh</v-icon>
-                    </v-btn>
-
                     <the-flush-button />
                     <the-reset-button />
                 </v-card-actions>
-
             </v-col>
 
             <v-col cols="12" lg="9">
@@ -37,8 +31,6 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex';
-
 export default {
     components: {
         theAnalyticsDemoForm: () => import('@/components/TheAnalyticsDemoForm'),
@@ -46,10 +38,6 @@ export default {
         periodSelectCard: () => import('@/components/PeriodSelectCard'),
         theFlushButton: () => import('@/components/UI/TheFlushButton'),
         theResetButton: () => import('@/components/UI/TheResetButton')
-    },
-
-    methods: {
-        ...mapMutations({ negateRefreshSignal: 'NEGATE_REFRESH_SIGNAL' })
     }
 };
 </script>

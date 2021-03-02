@@ -13,7 +13,7 @@
 cp .env.example .env
 
 # install dependencies
-npm cache clean && npm install
+npm install
 
 # run docker compose or install redis manually
 docker network create global

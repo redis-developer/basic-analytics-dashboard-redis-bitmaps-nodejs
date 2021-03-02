@@ -5,7 +5,7 @@
 cp .env.example .env
 
 # install dependencies
-npm cache clean && npm install
+npm install
 
 # run development mode
 npm run serve

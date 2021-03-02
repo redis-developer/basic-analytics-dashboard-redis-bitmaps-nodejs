@@ -115,14 +115,14 @@ Is generated key like: `rab:{type}[:custom:{customName}][:user:{userId}][:source
 
 ### Local installation
 
-Go to `/server` folder and then:
+Go to `/server` folder (`cd ./server`) and then:
 
 ```
 # copy file and set proper data inside
 cp .env.example .env
 
 # install dependencies
-npm cache clean && npm install
+npm install
 
 # run docker compose or install redis manually
 docker network create global
@@ -132,14 +132,14 @@ docker-compose up -d --build
 npm run dev
 ```
 
-Go to `/client` folder and then:
+Go to `/client` folder (`cd ./client`) and then:
 
 ```
 # copy file and set proper data inside
 cp .env.example .env
 
 # install dependencies
-npm cache clean && npm install
+npm install
 
 # run development mode
 npm run serve

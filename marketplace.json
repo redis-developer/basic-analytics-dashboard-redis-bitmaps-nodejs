@@ -19,12 +19,23 @@
     }
   ],
   "language": ["JavaScript"],
-  "redis_commands": ["SETBIT", "BITCOUNT", "GET", "SET", "INCR", "SADD", "SMEMBERS", "SINTER", "FLUSHALL"],
+  "redis_commands": [
+    "SETBIT",
+    "BITCOUNT",
+    "GET",
+    "SET",
+    "INCR",
+    "SADD",
+    "SMEMBERS",
+    "SINTER",
+    "SCAN",
+    "DEL"
+  ],
   "redis_features": ["bitmap"],
   "redis_modules": [],
   "app_image_urls": [
-  "https://github.com/RemoteCraftsmen/redis-analytics-bitmaps/blob/main/preview.png?raw=true"
-],
+    "https://github.com/RemoteCraftsmen/redis-analytics-bitmaps/blob/main/preview.png?raw=true"
+  ],
   "youtube_url": "",
   "special_tags": [],
   "verticals": ["Analitics"],

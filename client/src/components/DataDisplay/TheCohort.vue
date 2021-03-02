@@ -1,8 +1,6 @@
 <template>
     <v-card class="card">
-        <v-card-title class="px-4">
-            Cohort Analysis
-        </v-card-title>
+        <v-card-title class="px-4"> Cohort Analysis </v-card-title>
 
         <v-card-subtitle class="px-4">
             % of people who registered in December and then bought some product
@@ -13,28 +11,24 @@
                 <v-col cols="12" lg="7">
                     <v-simple-table>
                         <thead>
-                        <tr>
-                            <th class="text-left">
-                               Name
-                            </th>
-                            <th class="text-left">
-                                Count
-                            </th>
-                        </tr>
+                            <tr>
+                                <th class="text-left"> Name </th>
+                                <th class="text-left"> Count </th>
+                            </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>People who registered</td>
-                            <td>{{ register }}</td>
-                        </tr>
-                        <tr>
-                            <td>People who bought</td>
-                            <td>{{ registerThenBought }}</td>
-                        </tr>
-                        <tr>
-                            <td>Dropoff</td>
-                            <td>{{ dropoff || '0' }}</td>
-                        </tr>
+                            <tr>
+                                <td>People who registered</td>
+                                <td>{{ register }}</td>
+                            </tr>
+                            <tr>
+                                <td>People who bought</td>
+                                <td>{{ registerThenBought }}</td>
+                            </tr>
+                            <tr>
+                                <td>Dropoff</td>
+                                <td>{{ dropoff || '0' }}%</td>
+                            </tr>
                         </tbody>
                     </v-simple-table>
                 </v-col>
@@ -69,14 +63,14 @@ export default {
 
         chartData() {
             return {
-                labels: ['Registered', 'Bought', 'Dropoff [in %]'],
+                labels: ['Registered', 'Bought'],
                 datasets: [
                     {
                         barPercentage: 0.5,
                         barThickness: 6,
                         maxBarThickness: 8,
                         minBarLength: 2,
-                        data: [this.register, this.registerThenBought, this.dropoff],
+                        data: [this.register, this.registerThenBought],
                         label: 'December',
                         borderColor: 'rgba(225, 225, 60, 50)',
                         backgroundColor: 'rgba(225, 225, 60, 50)'
@@ -89,7 +83,7 @@ export default {
     watch: {
         refreshSignal() {
             this.fetchCohortData();
-        },
+        }
     },
 
     created() {

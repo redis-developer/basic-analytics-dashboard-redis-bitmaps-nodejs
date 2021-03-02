@@ -1,10 +1,11 @@
 const { promisify } = require('util');
+const { analytics } = require('../../config');
 
 class RedisService {
     constructor(redis) {
         this.redis = redis;
 
-        ['SETBIT', 'BITCOUNT', 'GET', 'SET', 'INCR', 'SADD', 'SMEMBERS', 'SINTER', 'FLUSHALL'].forEach(
+        ['SETBIT', 'BITCOUNT', 'GET', 'SET', 'INCR', 'SADD', 'SMEMBERS', 'SINTER', 'DEL', 'SCAN'].forEach(
             method => (this.redis[method] = promisify(this.redis[method]))
         );
     }
@@ -45,8 +46,33 @@ class RedisService {
         return this.redis.SINTER(key1, key2);
     }
 
-    flush() {
-        return this.redis.FLUSHALL();
+    async flush() {
+        const keys = await this.scan(`${analytics.prefix}:*`);
+
+        for (const key of keys) {
+            await this.redis.del(key);
+        }
+    }
+
+    async scan(pattern) {
+        let matchingKeysCount = 0;
+        let keys = [];
+
+        const recursiveScan = async (cursor = '0') => {
+            const [newCursor, matchingKeys] = await this.redis.SCAN(cursor, 'MATCH', pattern);
+            cursor = newCursor;
+
+            matchingKeysCount += matchingKeys.length;
+            keys = keys.concat(matchingKeys);
+
+            if (cursor === '0') {
+                return keys;
+            } else {
+                return await recursiveScan(cursor);
+            }
+        };
+
+        return await recursiveScan();
     }
 }
 

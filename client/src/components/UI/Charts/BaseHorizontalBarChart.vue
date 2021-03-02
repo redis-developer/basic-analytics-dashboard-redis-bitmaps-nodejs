@@ -6,7 +6,17 @@ export default {
     mixins: [HorizontalBar, reactiveProp],
 
     mounted() {
-        this.renderChart(this.chartData);
+        this.renderChart(this.chartData, {
+            scales: {
+                xAxes: [
+                    {
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }
+                ]
+            }
+        });
     }
 };
 </script>
