@@ -1,12 +1,12 @@
 <template>
     <v-btn
-        depressed
         color="warning"
         large
+        tile
         :loading="redisLoading"
         :disabled="redisLoading"
         @click="handleReset"
-        class="mt-3"
+        class="mt-3 mt-xl-0"
     >
         Reset Data
         <v-icon right dark>mdi-restart</v-icon>

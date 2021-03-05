@@ -17,10 +17,10 @@
                     </v-card-text>
                 </v-card>
 
-                <v-card-actions class="my-4 justify-space-around flex-wrap">
+                <div class="my-4 d-flex justify-space-between flex-wrap justify-lg-center justify-xl-space-between align-center ">
                     <the-flush-button />
                     <the-reset-button />
-                </v-card-actions>
+                </div>
             </v-col>
 
             <v-col cols="12" lg="9">
