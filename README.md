@@ -5,6 +5,11 @@ Showcases how to implement analytics system using Redis Bitmaps (and other data 
 <a href="https://github.com/redis-developer/basic-analytics-dashboard-redis-bitmaps-nodejs/blob/main/preview.png?raw=true"><img src="https://github.com/redis-developer/basic-analytics-dashboard-redis-bitmaps-nodejs/blob/main/preview-min.png?raw=true" width="100%" height="auto"></a>
 <a href="https://github.com/redis-developer/basic-analytics-dashboard-redis-bitmaps-nodejs/blob/main/preview-2.png?raw=true"><img src="https://github.com/redis-developer/basic-analytics-dashboard-redis-bitmaps-nodejs/blob/main/preview-2-min.png?raw=true" width="50%" height="auto"></a><a href="https://github.com/redis-developer/basic-analytics-dashboard-redis-bitmaps-nodejs/blob/main/preview-3.png?raw=true"><img src="https://github.com/redis-developer/basic-analytics-dashboard-redis-bitmaps-nodejs/blob/main/preview-3-min.png?raw=true" width="50%" height="auto"></a>
 
+# Overview video
+
+Here's a short video that explains the project and how it uses Redis:
+
+[![Watch the video on YouTube](docs/YTThumbnail.png)](https://www.youtube.com/watch?v=Ugym4yUeIhA)
 
 ## How it works
 ### How the data is stored:
