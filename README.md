@@ -9,7 +9,7 @@ Showcases how to implement analytics system using Redis Bitmaps (and other data 
 
 Here's a short video that explains the project and how it uses Redis:
 
-[![Watch the video on YouTube](docs/YTThumbnail.png)](https://www.youtube.com/watch?v=Ugym4yUeIhA)
+[![Watch the video on YouTube](https://github.com/redis-developer/basic-analytics-dashboard-redis-bitmaps-nodejs/blob/cb8c2178a6c5a019c42aa91739ad9bfdbb2d558c/docs/YTThumbnail.png)](https://www.youtube.com/watch?v=Ugym4yUeIhA)
 
 ## How it works
 ### How the data is stored:
